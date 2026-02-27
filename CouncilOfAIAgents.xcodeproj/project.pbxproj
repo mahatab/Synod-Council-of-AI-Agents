@@ -1,0 +1,435 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXFileReference section */
+		FA0000000000000000000001 /* App.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = App.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000002 /* main.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = main.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000003 /* index.ts */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = index.ts; sourceTree = "<group>"; };
+		FA0000000000000000000004 /* settingsStore.ts */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = settingsStore.ts; sourceTree = "<group>"; };
+		FA0000000000000000000005 /* sessionStore.ts */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = sessionStore.ts; sourceTree = "<group>"; };
+		FA0000000000000000000006 /* councilStore.ts */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = councilStore.ts; sourceTree = "<group>"; };
+		FA0000000000000000000007 /* globals.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = globals.css; sourceTree = "<group>"; };
+		FA0000000000000000000008 /* ModelManager.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = ModelManager.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000009 /* ApiKeyManager.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = ApiKeyManager.tsx; sourceTree = "<group>"; };
+		FA000000000000000000000A /* AdvancedSettings.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AdvancedSettings.tsx; sourceTree = "<group>"; };
+		FA000000000000000000000B /* SessionSettings.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = SessionSettings.tsx; sourceTree = "<group>"; };
+		FA000000000000000000000C /* AppearanceSettings.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AppearanceSettings.tsx; sourceTree = "<group>"; };
+		FA000000000000000000000D /* ApiKeyInfoPopover.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = ApiKeyInfoPopover.tsx; sourceTree = "<group>"; };
+		FA000000000000000000000E /* SettingsModal.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = SettingsModal.tsx; sourceTree = "<group>"; };
+		FA000000000000000000000F /* ThinkingIndicator.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = ThinkingIndicator.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000010 /* MasterVerdict.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = MasterVerdict.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000011 /* StreamingText.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = StreamingText.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000012 /* UserMessage.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = UserMessage.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000013 /* ClarifyingQuestion.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = ClarifyingQuestion.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000014 /* ChatView.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = ChatView.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000015 /* ModelResponse.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = ModelResponse.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000016 /* MainLayout.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = MainLayout.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000017 /* Header.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Header.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000018 /* Sidebar.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Sidebar.tsx; sourceTree = "<group>"; };
+		FA0000000000000000000019 /* SetupWizard.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = SetupWizard.tsx; sourceTree = "<group>"; };
+		FA000000000000000000001A /* Button.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Button.tsx; sourceTree = "<group>"; };
+		FA000000000000000000001B /* Toggle.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Toggle.tsx; sourceTree = "<group>"; };
+		FA000000000000000000001C /* Modal.tsx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Modal.tsx; sourceTree = "<group>"; };
+		FA000000000000000000001D /* markdown.ts */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = markdown.ts; sourceTree = "<group>"; };
+		FA000000000000000000001E /* tauri.ts */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = tauri.ts; sourceTree = "<group>"; };
+		FA000000000000000000001F /* theme.ts */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = theme.ts; sourceTree = "<group>"; };
+		FA0000000000000000000020 /* main.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.rs; sourceTree = "<group>"; };
+		FA0000000000000000000021 /* lib.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = lib.rs; sourceTree = "<group>"; };
+		FA0000000000000000000022 /* mod.rs */ = {isa = PBXFileReference; lastKnownFileType = text; name = mod.rs; path = mod.rs; sourceTree = "<group>"; };
+		FA0000000000000000000023 /* config.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = config.rs; sourceTree = "<group>"; };
+		FA0000000000000000000024 /* session.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = session.rs; sourceTree = "<group>"; };
+		FA0000000000000000000025 /* mod.rs */ = {isa = PBXFileReference; lastKnownFileType = text; name = mod.rs; path = mod.rs; sourceTree = "<group>"; };
+		FA0000000000000000000026 /* anthropic.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = anthropic.rs; sourceTree = "<group>"; };
+		FA0000000000000000000027 /* openai.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = openai.rs; sourceTree = "<group>"; };
+		FA0000000000000000000028 /* google.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = google.rs; sourceTree = "<group>"; };
+		FA0000000000000000000029 /* xai.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = xai.rs; sourceTree = "<group>"; };
+		FA000000000000000000002A /* mod.rs */ = {isa = PBXFileReference; lastKnownFileType = text; name = mod.rs; path = mod.rs; sourceTree = "<group>"; };
+		FA000000000000000000002B /* keychain.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = keychain.rs; sourceTree = "<group>"; };
+		FA000000000000000000002C /* api_calls.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = api_calls.rs; sourceTree = "<group>"; };
+		FA000000000000000000002D /* sessions.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = sessions.rs; sourceTree = "<group>"; };
+		FA000000000000000000002E /* settings.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = settings.rs; sourceTree = "<group>"; };
+		FA000000000000000000002F /* ARCHITECTURE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ARCHITECTURE.md; sourceTree = "<group>"; };
+		FA0000000000000000000030 /* ADDING_PROVIDERS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ADDING_PROVIDERS.md; sourceTree = "<group>"; };
+		FA0000000000000000000031 /* SETUP_GUIDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SETUP_GUIDE.md; sourceTree = "<group>"; };
+		FA0000000000000000000032 /* API_PROVIDERS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = API_PROVIDERS.md; sourceTree = "<group>"; };
+		FA0000000000000000000033 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		FA0000000000000000000034 /* tsconfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tsconfig.json; sourceTree = "<group>"; };
+		FA0000000000000000000035 /* tsconfig.app.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tsconfig.app.json; sourceTree = "<group>"; };
+		FA0000000000000000000036 /* tsconfig.node.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tsconfig.node.json; sourceTree = "<group>"; };
+		FA0000000000000000000037 /* vite.config.ts */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = vite.config.ts; sourceTree = "<group>"; };
+		FA0000000000000000000038 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		FA0000000000000000000039 /* eslint.config.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = eslint.config.js; sourceTree = "<group>"; };
+		FA000000000000000000003A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		FA000000000000000000003B /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
+		FA000000000000000000003C /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		FA000000000000000000003E /* tauri-dev.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "tauri-dev.sh"; sourceTree = "<group>"; };
+		FA000000000000000000003F /* tauri-build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "tauri-build.sh"; sourceTree = "<group>"; };
+		FA0000000000000000000040 /* Cargo.toml */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cargo.toml; sourceTree = "<group>"; };
+		FA0000000000000000000041 /* tauri.conf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tauri.conf.json; sourceTree = "<group>"; };
+		FA0000000000000000000042 /* build.rs */ = {isa = PBXFileReference; lastKnownFileType = text; path = build.rs; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		A1B2C3D4E5F6A7B8C9D0E1F1 /* CouncilOfAIAgents */ = {
+			isa = PBXGroup;
+			children = (
+				GA0000000000000000000001 /* src */,
+				GA000000000000000000000C /* src-tauri */,
+				GA0000000000000000000011 /* docs */,
+				GA0000000000000000000012 /* scripts */,
+				FA0000000000000000000033 /* package.json */,
+				FA0000000000000000000034 /* tsconfig.json */,
+				FA0000000000000000000035 /* tsconfig.app.json */,
+				FA0000000000000000000036 /* tsconfig.node.json */,
+				FA0000000000000000000037 /* vite.config.ts */,
+				FA0000000000000000000038 /* index.html */,
+				FA0000000000000000000039 /* eslint.config.js */,
+				FA000000000000000000003A /* README.md */,
+				FA000000000000000000003B /* CONTRIBUTING.md */,
+				FA000000000000000000003C /* LICENSE */,
+			);
+			sourceTree = "<group>";
+		};
+		GA0000000000000000000001 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				FA0000000000000000000001 /* App.tsx */,
+				FA0000000000000000000002 /* main.tsx */,
+				GA0000000000000000000002 /* types */,
+				GA0000000000000000000003 /* stores */,
+				GA0000000000000000000004 /* styles */,
+				GA0000000000000000000005 /* components */,
+				GA000000000000000000000B /* lib */,
+			);
+			name = src;
+			path = src;
+			sourceTree = "<group>";
+		};
+		GA0000000000000000000002 /* types */ = {
+			isa = PBXGroup;
+			children = (
+				FA0000000000000000000003 /* index.ts */,
+			);
+			path = types;
+			sourceTree = "<group>";
+		};
+		GA0000000000000000000003 /* stores */ = {
+			isa = PBXGroup;
+			children = (
+				FA0000000000000000000004 /* settingsStore.ts */,
+				FA0000000000000000000005 /* sessionStore.ts */,
+				FA0000000000000000000006 /* councilStore.ts */,
+			);
+			path = stores;
+			sourceTree = "<group>";
+		};
+		GA0000000000000000000004 /* styles */ = {
+			isa = PBXGroup;
+			children = (
+				FA0000000000000000000007 /* globals.css */,
+			);
+			path = styles;
+			sourceTree = "<group>";
+		};
+		GA0000000000000000000005 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				GA0000000000000000000006 /* settings */,
+				GA0000000000000000000007 /* chat */,
+				GA0000000000000000000008 /* layout */,
+				GA0000000000000000000009 /* setup */,
+				GA000000000000000000000A /* common */,
+			);
+			path = components;
+			sourceTree = "<group>";
+		};
+		GA0000000000000000000006 /* settings */ = {
+			isa = PBXGroup;
+			children = (
+				FA0000000000000000000008 /* ModelManager.tsx */,
+				FA0000000000000000000009 /* ApiKeyManager.tsx */,
+				FA000000000000000000000A /* AdvancedSettings.tsx */,
+				FA000000000000000000000B /* SessionSettings.tsx */,
+				FA000000000000000000000C /* AppearanceSettings.tsx */,
+				FA000000000000000000000D /* ApiKeyInfoPopover.tsx */,
+				FA000000000000000000000E /* SettingsModal.tsx */,
+			);
+			path = settings;
+			sourceTree = "<group>";
+		};
+		GA0000000000000000000007 /* chat */ = {
+			isa = PBXGroup;
+			children = (
+				FA000000000000000000000F /* ThinkingIndicator.tsx */,
+				FA0000000000000000000010 /* MasterVerdict.tsx */,
+				FA0000000000000000000011 /* StreamingText.tsx */,
+				FA0000000000000000000012 /* UserMessage.tsx */,
+				FA0000000000000000000013 /* ClarifyingQuestion.tsx */,
+				FA0000000000000000000014 /* ChatView.tsx */,
+				FA0000000000000000000015 /* ModelResponse.tsx */,
+			);
+			path = chat;
+			sourceTree = "<group>";
+		};
+		GA0000000000000000000008 /* layout */ = {
+			isa = PBXGroup;
+			children = (
+				FA0000000000000000000016 /* MainLayout.tsx */,
+				FA0000000000000000000017 /* Header.tsx */,
+				FA0000000000000000000018 /* Sidebar.tsx */,
+			);
+			path = layout;
+			sourceTree = "<group>";
+		};
+		GA0000000000000000000009 /* setup */ = {
+			isa = PBXGroup;
+			children = (
+				FA0000000000000000000019 /* SetupWizard.tsx */,
+			);
+			path = setup;
+			sourceTree = "<group>";
+		};
+		GA000000000000000000000A /* common */ = {
+			isa = PBXGroup;
+			children = (
+				FA000000000000000000001A /* Button.tsx */,
+				FA000000000000000000001B /* Toggle.tsx */,
+				FA000000000000000000001C /* Modal.tsx */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		GA000000000000000000000B /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				FA000000000000000000001D /* markdown.ts */,
+				FA000000000000000000001E /* tauri.ts */,
+				FA000000000000000000001F /* theme.ts */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		GA000000000000000000000C /* src-tauri */ = {
+			isa = PBXGroup;
+			children = (
+				FA0000000000000000000040 /* Cargo.toml */,
+				FA0000000000000000000041 /* tauri.conf.json */,
+				FA0000000000000000000042 /* build.rs */,
+				GA000000000000000000000D /* src */,
+			);
+			name = "src-tauri";
+			path = "src-tauri";
+			sourceTree = "<group>";
+		};
+		GA000000000000000000000D /* src */ = {
+			isa = PBXGroup;
+			children = (
+				FA0000000000000000000020 /* main.rs */,
+				FA0000000000000000000021 /* lib.rs */,
+				GA000000000000000000000E /* models */,
+				GA000000000000000000000F /* providers */,
+				GA0000000000000000000010 /* commands */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		GA000000000000000000000E /* models */ = {
+			isa = PBXGroup;
+			children = (
+				FA0000000000000000000022 /* mod.rs */,
+				FA0000000000000000000023 /* config.rs */,
+				FA0000000000000000000024 /* session.rs */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		GA000000000000000000000F /* providers */ = {
+			isa = PBXGroup;
+			children = (
+				FA0000000000000000000025 /* mod.rs */,
+				FA0000000000000000000026 /* anthropic.rs */,
+				FA0000000000000000000027 /* openai.rs */,
+				FA0000000000000000000028 /* google.rs */,
+				FA0000000000000000000029 /* xai.rs */,
+			);
+			path = providers;
+			sourceTree = "<group>";
+		};
+		GA0000000000000000000010 /* commands */ = {
+			isa = PBXGroup;
+			children = (
+				FA000000000000000000002A /* mod.rs */,
+				FA000000000000000000002B /* keychain.rs */,
+				FA000000000000000000002C /* api_calls.rs */,
+				FA000000000000000000002D /* sessions.rs */,
+				FA000000000000000000002E /* settings.rs */,
+			);
+			path = commands;
+			sourceTree = "<group>";
+		};
+		GA0000000000000000000011 /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				FA000000000000000000002F /* ARCHITECTURE.md */,
+				FA0000000000000000000030 /* ADDING_PROVIDERS.md */,
+				FA0000000000000000000031 /* SETUP_GUIDE.md */,
+				FA0000000000000000000032 /* API_PROVIDERS.md */,
+			);
+			name = docs;
+			path = docs;
+			sourceTree = "<group>";
+		};
+		GA0000000000000000000012 /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				FA000000000000000000003E /* tauri-dev.sh */,
+				FA000000000000000000003F /* tauri-build.sh */,
+			);
+			name = scripts;
+			path = scripts;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		B1C2D3E4F5A6B7C8D9E0F1A1 /* Dev */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "-c \"\\\"$(SRCROOT)/scripts/tauri-dev.sh\\\"\"";
+			buildConfigurationList = D1E2F3A4B5C6D7E8F9A0B1C1 /* Build configuration list for PBXLegacyTarget "Dev" */;
+			buildPhases = (
+			);
+			buildToolPath = /bin/sh;
+			buildWorkingDirectory = "$(SRCROOT)";
+			dependencies = (
+			);
+			name = Dev;
+			passBuildSettingsInEnvironment = 1;
+			productName = Dev;
+		};
+		B1C2D3E4F5A6B7C8D9E0F1A2 /* Build */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "-c \"\\\"$(SRCROOT)/scripts/tauri-build.sh\\\"\"";
+			buildConfigurationList = D1E2F3A4B5C6D7E8F9A0B1C2 /* Build configuration list for PBXLegacyTarget "Build" */;
+			buildPhases = (
+			);
+			buildToolPath = /bin/sh;
+			buildWorkingDirectory = "$(SRCROOT)";
+			dependencies = (
+			);
+			name = Build;
+			passBuildSettingsInEnvironment = 1;
+			productName = Build;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		C1D2E3F4A5B6C7D8E9F0A1B1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = D1E2F3A4B5C6D7E8F9A0B1C3 /* Build configuration list for PBXProject "CouncilOfAIAgents" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A1B2C3D4E5F6A7B8C9D0E1F1;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B1C2D3E4F5A6B7C8D9E0F1A1 /* Dev */,
+				B1C2D3E4F5A6B7C8D9E0F1A2 /* Build */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		E1F2A3B4C5D6E7F8A9B0C1D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		E1F2A3B4C5D6E7F8A9B0C1D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		E1F2A3B4C5D6E7F8A9B0C1D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		E1F2A3B4C5D6E7F8A9B0C1D4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		E1F2A3B4C5D6E7F8A9B0C1D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+			};
+			name = Debug;
+		};
+		E1F2A3B4C5D6E7F8A9B0C1D6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D1E2F3A4B5C6D7E8F9A0B1C1 /* Build configuration list for PBXLegacyTarget "Dev" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E1F2A3B4C5D6E7F8A9B0C1D1 /* Debug */,
+				E1F2A3B4C5D6E7F8A9B0C1D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D1E2F3A4B5C6D7E8F9A0B1C2 /* Build configuration list for PBXLegacyTarget "Build" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E1F2A3B4C5D6E7F8A9B0C1D3 /* Debug */,
+				E1F2A3B4C5D6E7F8A9B0C1D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D1E2F3A4B5C6D7E8F9A0B1C3 /* Build configuration list for PBXProject "CouncilOfAIAgents" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E1F2A3B4C5D6E7F8A9B0C1D5 /* Debug */,
+				E1F2A3B4C5D6E7F8A9B0C1D6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C1D2E3F4A5B6C7D8E9F0A1B1 /* Project object */;
+}
