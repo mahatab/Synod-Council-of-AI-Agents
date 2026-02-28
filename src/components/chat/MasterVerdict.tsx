@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Scale } from 'lucide-react';
+import { Scale, Copy, Check } from 'lucide-react';
 import StreamingText from './StreamingText';
 import ThinkingIndicator from './ThinkingIndicator';
 
@@ -14,6 +15,13 @@ export default function MasterVerdict({
   isStreaming = false,
   isThinking = false,
 }: MasterVerdictProps) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(content);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
   return (
     <motion.div
       className="px-6 py-5"
@@ -31,6 +39,15 @@ export default function MasterVerdict({
               <span className="text-sm font-bold text-[var(--color-accent)] uppercase tracking-wide">
                 Final Verdict
               </span>
+              {content && !isThinking && (
+                <button
+                  onClick={handleCopy}
+                  className="ml-auto p-1.5 rounded-[var(--radius-sm)] text-[var(--color-text-tertiary)] hover:text-[var(--color-accent)] hover:bg-[var(--color-bg-hover)] transition-colors"
+                  title={copied ? 'Copied!' : 'Copy verdict'}
+                >
+                  {copied ? <Check size={14} /> : <Copy size={14} />}
+                </button>
+              )}
             </div>
 
             {isThinking && !content ? (

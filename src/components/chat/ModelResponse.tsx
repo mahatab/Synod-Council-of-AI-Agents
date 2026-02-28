@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Bot } from 'lucide-react';
+import { Bot, Copy, Check } from 'lucide-react';
 import StreamingText from './StreamingText';
 import ThinkingIndicator from './ThinkingIndicator';
 import { getProviderColor } from '../../types';
@@ -24,6 +25,13 @@ export default function ModelResponse({
   clarifyingExchange,
 }: ModelResponseProps) {
   const color = getProviderColor(provider as Provider);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(content);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <motion.div
@@ -53,6 +61,15 @@ export default function ModelResponse({
             >
               {provider}
             </span>
+            {content && !isThinking && (
+              <button
+                onClick={handleCopy}
+                className="ml-auto p-1.5 rounded-[var(--radius-sm)] text-[var(--color-text-tertiary)] hover:text-[var(--color-accent)] hover:bg-[var(--color-bg-hover)] transition-colors"
+                title={copied ? 'Copied!' : 'Copy response'}
+              >
+                {copied ? <Check size={14} /> : <Copy size={14} />}
+              </button>
+            )}
           </div>
 
           {isThinking && !content ? (
