@@ -18,6 +18,7 @@ const defaultSettings: AppSettings = {
   masterModel: { provider: 'anthropic', model: 'claude-opus-4-6' },
   systemPromptMode: 'upfront',
   theme: 'system',
+  cursorStyle: 'orbit',
   sessionSavePath: null,
   setupCompleted: false,
 };

@@ -16,11 +16,14 @@ export type SystemPromptMode = 'upfront' | 'dynamic';
 
 export type ThemeMode = 'light' | 'dark' | 'system';
 
+export type CursorStyle = 'ripple' | 'breathing' | 'orbit' | 'multi';
+
 export interface AppSettings {
   councilModels: ModelConfig[];
   masterModel: MasterModelConfig;
   systemPromptMode: SystemPromptMode;
   theme: ThemeMode;
+  cursorStyle: CursorStyle;
   sessionSavePath: string | null;
   setupCompleted: boolean;
 }

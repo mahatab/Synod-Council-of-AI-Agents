@@ -1,12 +1,19 @@
 import { Settings } from 'lucide-react';
+import { useSessionStore } from '../../stores/sessionStore';
 
 interface HeaderProps {
   onOpenSettings: () => void;
 }
 
 export default function Header({ onOpenSettings }: HeaderProps) {
+  const activeSession = useSessionStore((s) => s.activeSession);
+  const title = activeSession?.title || 'New Session';
+
   return (
-    <div className="titlebar-drag-region h-12 flex items-center justify-end px-4 bg-[var(--color-bg-primary)] border-b border-[var(--color-border-primary)]">
+    <div className="titlebar-drag-region h-12 flex items-center justify-between px-4 bg-[var(--color-bg-primary)] border-b border-[var(--color-border-primary)]">
+      <span className="titlebar-no-drag text-sm font-medium text-[var(--color-text-secondary)] truncate pl-16">
+        {title}
+      </span>
       <button
         onClick={onOpenSettings}
         className="titlebar-no-drag p-2 rounded-[var(--radius-sm)] text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-hover)] transition-colors"

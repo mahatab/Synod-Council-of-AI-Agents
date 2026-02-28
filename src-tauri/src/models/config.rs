@@ -75,11 +75,28 @@ impl Default for ThemeMode {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+pub enum CursorStyle {
+    Ripple,
+    Breathing,
+    Orbit,
+    Multi,
+}
+
+impl Default for CursorStyle {
+    fn default() -> Self {
+        CursorStyle::Orbit
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct AppSettings {
     pub council_models: Vec<ModelConfig>,
     pub master_model: MasterModelConfig,
     pub system_prompt_mode: SystemPromptMode,
     pub theme: ThemeMode,
+    #[serde(default)]
+    pub cursor_style: CursorStyle,
     pub session_save_path: Option<String>,
     pub setup_completed: bool,
 }
@@ -94,6 +111,7 @@ impl Default for AppSettings {
             },
             system_prompt_mode: SystemPromptMode::default(),
             theme: ThemeMode::default(),
+            cursor_style: CursorStyle::default(),
             session_save_path: None,
             setup_completed: false,
         }

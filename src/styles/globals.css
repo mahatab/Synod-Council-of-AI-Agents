@@ -115,6 +115,94 @@ html, body, #root {
   -webkit-app-region: no-drag;
 }
 
+/* ── Streaming cursor animations ── */
+
+/* Ripple Pulse: expanding rings radiate outward */
+@keyframes cursor-ripple {
+  0% { box-shadow: 0 0 0 0 var(--color-accent), 0 0 0 0 color-mix(in srgb, var(--color-accent) 40%, transparent); }
+  40% { box-shadow: 0 0 4px 4px color-mix(in srgb, var(--color-accent) 30%, transparent), 0 0 8px 8px color-mix(in srgb, var(--color-accent) 10%, transparent); }
+  100% { box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent; opacity: 0.6; }
+}
+.cursor-ripple {
+  animation: cursor-ripple 1.5s ease-out infinite;
+}
+
+/* Breathing Glow: circle pulses with a warm aura */
+@keyframes cursor-breathing {
+  0%, 100% { transform: scale(1); opacity: 0.4; box-shadow: 0 0 3px var(--color-accent); }
+  50% { transform: scale(1.6); opacity: 1; box-shadow: 0 0 10px var(--color-accent), 0 0 20px color-mix(in srgb, var(--color-accent) 30%, transparent); }
+}
+.cursor-breathing {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  animation: cursor-breathing 2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Orbit Ring: dot orbits around a circular cursor */
+@keyframes cursor-orbit-dot {
+  from { transform: rotate(0deg) translateX(10px); }
+  to { transform: rotate(360deg) translateX(10px); }
+}
+.cursor-orbit {
+  position: relative;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 4px var(--color-accent);
+}
+.cursor-orbit::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  top: 50%;
+  left: 50%;
+  margin: -1.5px 0 0 -1.5px;
+  animation: cursor-orbit-dot 1.2s linear infinite;
+  box-shadow: 0 0 6px var(--color-accent);
+}
+
+/* Multi-Caret: three cursors blink in sequence like a wave */
+@keyframes cursor-multi-lead {
+  0%, 25% { opacity: 1; }
+  35%, 100% { opacity: 0.12; }
+}
+@keyframes cursor-multi-mid {
+  0%, 25% { opacity: 0.12; }
+  35%, 60% { opacity: 1; }
+  70%, 100% { opacity: 0.12; }
+}
+@keyframes cursor-multi-tail {
+  0%, 60% { opacity: 0.12; }
+  70%, 90% { opacity: 1; }
+  100% { opacity: 0.12; }
+}
+.cursor-multi {
+  position: relative;
+  animation: cursor-multi-mid 1.2s ease-in-out infinite;
+}
+.cursor-multi::before,
+.cursor-multi::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-accent);
+}
+.cursor-multi::before {
+  left: -7px;
+  animation: cursor-multi-lead 1.2s ease-in-out infinite;
+}
+.cursor-multi::after {
+  left: 7px;
+  animation: cursor-multi-tail 1.2s ease-in-out infinite;
+}
+
 /* Thinking animation */
 @keyframes thinking-pulse {
   0%, 100% { opacity: 0.3; }

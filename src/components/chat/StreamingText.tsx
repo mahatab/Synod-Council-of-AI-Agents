@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { motion } from 'framer-motion';
+import { useSettingsStore } from '../../stores/settingsStore';
 
 interface StreamingTextProps {
   content: string;
@@ -8,14 +8,14 @@ interface StreamingTextProps {
 }
 
 export default function StreamingText({ content, isStreaming = false }: StreamingTextProps) {
+  const cursorStyle = useSettingsStore((s) => s.settings.cursorStyle);
+
   return (
     <div className="markdown-content text-[15px] leading-relaxed text-[var(--color-text-primary)]">
       <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
       {isStreaming && (
-        <motion.span
-          className="inline-block w-0.5 h-5 ml-0.5 bg-[var(--color-accent)] align-text-bottom"
-          animate={{ opacity: [1, 0] }}
-          transition={{ duration: 0.8, repeat: Infinity }}
+        <span
+          className={`cursor-${cursorStyle} inline-block w-[3px] h-[1.1em] ml-1 rounded-sm bg-[var(--color-accent)] align-text-bottom`}
         />
       )}
     </div>
