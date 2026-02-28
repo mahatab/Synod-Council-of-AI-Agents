@@ -1,4 +1,4 @@
-export type Provider = 'anthropic' | 'openai' | 'google' | 'xai';
+export type Provider = 'anthropic' | 'openai' | 'google' | 'xai' | 'deepseek' | 'mistral' | 'together' | 'cohere';
 
 export interface ModelConfig {
   provider: Provider;
@@ -122,6 +122,7 @@ export const PROVIDERS: ProviderInfo[] = [
     models: [
       { id: 'claude-opus-4-6', name: 'Claude Opus 4.6' },
       { id: 'claude-sonnet-4-6', name: 'Claude Sonnet 4.6' },
+      { id: 'claude-sonnet-4-5', name: 'Claude Sonnet 4.5' },
       { id: 'claude-haiku-4-5-20251001', name: 'Claude Haiku 4.5' },
     ],
     apiKeyUrl: 'https://console.anthropic.com/settings/keys',
@@ -138,9 +139,16 @@ export const PROVIDERS: ProviderInfo[] = [
     name: 'OpenAI',
     keychainService: 'com.council-of-ai-agents.openai',
     models: [
+      { id: 'gpt-5.2', name: 'GPT-5.2' },
+      { id: 'gpt-5.2-pro', name: 'GPT-5.2 Pro' },
+      { id: 'gpt-4.1', name: 'GPT-4.1' },
+      { id: 'gpt-4.1-mini', name: 'GPT-4.1 Mini' },
+      { id: 'gpt-4.1-nano', name: 'GPT-4.1 Nano' },
       { id: 'gpt-4o', name: 'GPT-4o' },
       { id: 'gpt-4o-mini', name: 'GPT-4o Mini' },
-      { id: 'gpt-4.1', name: 'GPT-4.1' },
+      { id: 'o3', name: 'o3' },
+      { id: 'o3-mini', name: 'o3-mini' },
+      { id: 'o4-mini', name: 'o4-mini' },
     ],
     apiKeyUrl: 'https://platform.openai.com/api-keys',
     apiKeySteps: [
@@ -175,6 +183,7 @@ export const PROVIDERS: ProviderInfo[] = [
     name: 'xAI',
     keychainService: 'com.council-of-ai-agents.xai',
     models: [
+      { id: 'grok-4-0709', name: 'Grok-4' },
       { id: 'grok-3', name: 'Grok-3' },
       { id: 'grok-3-mini', name: 'Grok-3 Mini' },
     ],
@@ -185,6 +194,75 @@ export const PROVIDERS: ProviderInfo[] = [
       'Navigate to API Keys section',
       'Click "Create API Key"',
       'Copy the generated key',
+    ],
+  },
+  {
+    id: 'deepseek',
+    name: 'DeepSeek',
+    keychainService: 'com.council-of-ai-agents.deepseek',
+    models: [
+      { id: 'deepseek-chat', name: 'DeepSeek V3 (Chat)' },
+      { id: 'deepseek-reasoner', name: 'DeepSeek R1 (Reasoner)' },
+    ],
+    apiKeyUrl: 'https://platform.deepseek.com/api_keys',
+    apiKeySteps: [
+      'Go to platform.deepseek.com',
+      'Sign in or create an account',
+      'Navigate to API Keys section',
+      'Click "Create new API key"',
+      'Copy the generated key (it starts with "sk-")',
+    ],
+  },
+  {
+    id: 'mistral',
+    name: 'Mistral',
+    keychainService: 'com.council-of-ai-agents.mistral',
+    models: [
+      { id: 'mistral-large-latest', name: 'Mistral Large' },
+      { id: 'mistral-medium-latest', name: 'Mistral Medium' },
+      { id: 'mistral-small-latest', name: 'Mistral Small' },
+      { id: 'codestral-latest', name: 'Codestral' },
+    ],
+    apiKeyUrl: 'https://console.mistral.ai/api-keys',
+    apiKeySteps: [
+      'Go to console.mistral.ai',
+      'Sign in or create an account',
+      'Navigate to API Keys section',
+      'Click "Create new key"',
+      'Copy the generated API key',
+    ],
+  },
+  {
+    id: 'together',
+    name: 'Together AI',
+    keychainService: 'com.council-of-ai-agents.together',
+    models: [
+      { id: 'meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8', name: 'Llama 4 Maverick' },
+      { id: 'meta-llama/Llama-4-Scout-17B-16E-Instruct', name: 'Llama 4 Scout' },
+    ],
+    apiKeyUrl: 'https://api.together.xyz/settings/api-keys',
+    apiKeySteps: [
+      'Go to api.together.xyz',
+      'Sign in or create an account',
+      'Navigate to Settings > API Keys',
+      'Copy your API key',
+    ],
+  },
+  {
+    id: 'cohere',
+    name: 'Cohere',
+    keychainService: 'com.council-of-ai-agents.cohere',
+    models: [
+      { id: 'command-a-03-2025', name: 'Command A' },
+      { id: 'command-r-plus-08-2024', name: 'Command R+' },
+    ],
+    apiKeyUrl: 'https://dashboard.cohere.com/api-keys',
+    apiKeySteps: [
+      'Go to dashboard.cohere.com',
+      'Sign in or create an account',
+      'Navigate to API Keys section',
+      'Click "Create Trial Key" or "Create Production Key"',
+      'Copy the generated API key',
     ],
   },
 ];
@@ -203,5 +281,13 @@ export function getProviderColor(provider: Provider): string {
       return '#4285F4';
     case 'xai':
       return '#1DA1F2';
+    case 'deepseek':
+      return '#536AF6';
+    case 'mistral':
+      return '#FF7000';
+    case 'together':
+      return '#6366F1';
+    case 'cohere':
+      return '#39594D';
   }
 }

@@ -18,6 +18,10 @@ const LEGACY_SERVICES: &[(&str, &str)] = &[
     ("openai", "com.council-of-ai-agents.openai"),
     ("google", "com.council-of-ai-agents.google"),
     ("xai", "com.council-of-ai-agents.xai"),
+    ("deepseek", "com.council-of-ai-agents.deepseek"),
+    ("mistral", "com.council-of-ai-agents.mistral"),
+    ("together", "com.council-of-ai-agents.together"),
+    ("cohere", "com.council-of-ai-agents.cohere"),
 ];
 
 /// In-memory cache for API keys. `None` means not loaded yet.

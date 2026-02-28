@@ -2,6 +2,10 @@ pub mod anthropic;
 pub mod openai;
 pub mod google;
 pub mod xai;
+pub mod deepseek;
+pub mod mistral;
+pub mod together;
+pub mod cohere;
 
 use anyhow::Result;
 use futures::Stream;

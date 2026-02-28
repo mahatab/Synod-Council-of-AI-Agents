@@ -3,8 +3,9 @@ use tauri::{command, AppHandle, Emitter};
 
 use crate::models::config::{ChatMessage, Provider, StreamToken};
 use crate::providers::{
-    anthropic::AnthropicProvider, google::GoogleProvider, openai::OpenAIProvider,
-    xai::XAIProvider,
+    anthropic::AnthropicProvider, cohere::CohereProvider, deepseek::DeepSeekProvider,
+    google::GoogleProvider, mistral::MistralProvider, openai::OpenAIProvider,
+    together::TogetherProvider, xai::XAIProvider,
 };
 
 #[command]
@@ -35,6 +36,22 @@ pub async fn stream_chat(
         }
         Provider::XAI => {
             let p = XAIProvider::new();
+            p.stream_chat(&api_key, &model, &messages, system_ref).await
+        }
+        Provider::DeepSeek => {
+            let p = DeepSeekProvider::new();
+            p.stream_chat(&api_key, &model, &messages, system_ref).await
+        }
+        Provider::Mistral => {
+            let p = MistralProvider::new();
+            p.stream_chat(&api_key, &model, &messages, system_ref).await
+        }
+        Provider::Together => {
+            let p = TogetherProvider::new();
+            p.stream_chat(&api_key, &model, &messages, system_ref).await
+        }
+        Provider::Cohere => {
+            let p = CohereProvider::new();
             p.stream_chat(&api_key, &model, &messages, system_ref).await
         }
     };

@@ -7,6 +7,10 @@ pub enum Provider {
     OpenAI,
     Google,
     XAI,
+    DeepSeek,
+    Mistral,
+    Together,
+    Cohere,
 }
 
 #[allow(dead_code)]
@@ -17,6 +21,10 @@ impl Provider {
             Provider::OpenAI => "OpenAI",
             Provider::Google => "Google",
             Provider::XAI => "xAI",
+            Provider::DeepSeek => "DeepSeek",
+            Provider::Mistral => "Mistral",
+            Provider::Together => "Together AI",
+            Provider::Cohere => "Cohere",
         }
     }
 
@@ -26,6 +34,10 @@ impl Provider {
             Provider::OpenAI => "com.council-of-ai-agents.openai",
             Provider::Google => "com.council-of-ai-agents.google",
             Provider::XAI => "com.council-of-ai-agents.xai",
+            Provider::DeepSeek => "com.council-of-ai-agents.deepseek",
+            Provider::Mistral => "com.council-of-ai-agents.mistral",
+            Provider::Together => "com.council-of-ai-agents.together",
+            Provider::Cohere => "com.council-of-ai-agents.cohere",
         }
     }
 }
