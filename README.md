@@ -1,107 +1,174 @@
-# Synod — Council of AI Agents
+<p align="center">
+  <img src="synod.jpg" alt="Synod" width="180" />
+</p>
 
-A macOS desktop application that assembles a council of AI models to collaboratively help you make informed, fact-based decisions. Ask a question, and multiple AI models from different providers discuss it sequentially, each building on previous insights, before a master model delivers the final verdict.
+<h1 align="center">Synod</h1>
+
+<p align="center">
+  <strong>A council of AI models, one definitive verdict.</strong>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
+  <img src="https://img.shields.io/badge/tauri-v2-24C8D8?logo=tauri&logoColor=white" alt="Tauri v2" />
+  <img src="https://img.shields.io/badge/react-19-61DAFB?logo=react&logoColor=white" alt="React 19" />
+  <img src="https://img.shields.io/badge/rust-stable-DEA584?logo=rust&logoColor=white" alt="Rust" />
+  <img src="https://img.shields.io/badge/platform-macOS-000000?logo=apple&logoColor=white" alt="macOS" />
+</p>
+
+---
+
+Synod is a macOS desktop app that assembles a **council of AI models** to collaboratively tackle your questions. Multiple models from different providers discuss the topic sequentially — each building on what came before — then a **master model** synthesizes everything into a clear, actionable verdict.
 
 ## How It Works
 
-1. **You ask a question** - "Which 70-inch TV should I buy for $600?"
-2. **First council model responds** - Can ask clarifying questions if needed
-3. **Each subsequent model reviews** - Sees the question and all previous responses, adds its unique perspective
-4. **Master model delivers verdict** - Synthesizes all opinions into a clear, actionable recommendation
+```
+ You ask a question
+        |
+        v
+ Council models respond one by one
+ (each sees the full discussion so far)
+        |
+        v
+ Master model delivers the final verdict
+        |
+        v
+ @mention any model to follow up
+```
 
 ## Features
 
-- **Multi-Model Council** - Configure models from Anthropic (Claude), OpenAI (GPT), Google (Gemini), and xAI (Grok)
-- **Sequential Discussion** - Each model sees and builds on previous responses
-- **Configurable Order** - Drag-and-drop to reorder which model responds first
-- **Real-time Streaming** - Watch responses appear token by token
-- **Clarifying Questions** - First model can ask follow-up questions for better context
-- **AI-Generated System Prompts** - Master model generates tailored prompts for each council member
-- **Dark & Light Mode** - Follows system preference or manual toggle
-- **Session History** - Conversations saved locally, searchable in sidebar
-- **Secure API Key Storage** - Keys stored in macOS Keychain
-- **Claude-Inspired Design** - Clean, minimal interface with smooth animations
+### Council Discussion
+- **8 providers, 30+ models** — Anthropic, OpenAI, Google, xAI, DeepSeek, Mistral, Together AI, and Cohere
+- **Sequential deliberation** — each model sees the original question plus every previous response
+- **Master verdict** — a designated model synthesizes all opinions into a final recommendation
+- **Clarifying questions** — the first council member can ask up to 2 clarifying questions before proceeding
+
+### Follow-Up @Mentions
+- After the verdict, type **`@`** to mention any council member or the master model
+- Ask follow-up questions with **full discussion context** — the model sees every response, not just its own
+- Cross-reference freely: *"@Grok what do you think about GPT's suggestion?"*
+- Chain unlimited follow-ups within the same session
+
+### Smart Prompt Engineering
+- **Upfront mode** — master generates tailored system prompts for all council members before the discussion starts
+- **Dynamic mode** — master generates a custom prompt for each model right before its turn, incorporating context from previous responses
+
+### Discussion Depth
+- **Thorough** — detailed analysis with comprehensive reasoning
+- **Concise** — 2-3 key points per model, optimized for speed and cost
+
+### Session Management
+- Auto-save after every response — never lose a discussion
+- AI-generated session titles
+- Searchable history grouped by date
+- Custom storage location
+
+### Token Usage Tracking
+- Per-model input/output token counts
+- Aggregated usage stats in Settings
+- System prompt generation tokens tracked separately
+
+### Polished UX
+- **Real-time streaming** with 4 animated cursor styles (ripple, breathing, orbit, multi-caret)
+- **Dark, light, and system themes** with smooth transitions
+- **Drag-and-drop** model reordering
+- **Secure API key storage** in macOS Keychain
+- Native macOS window with overlay title bar
 
 ## Supported Providers
 
-| Provider | Models | API |
-|----------|--------|-----|
-| Anthropic | Claude Opus 4.6, Sonnet 4.6, Haiku 4.5 | Messages API |
-| OpenAI | GPT-4o, GPT-4o Mini, GPT-4.1 | Chat Completions |
-| Google | Gemini 2.0 Flash, Flash Lite, 1.5 Pro | Gemini API |
-| xAI | Grok-3, Grok-3 Mini | OpenAI-compatible |
+| Provider | Models |
+|----------|--------|
+| **Anthropic** | Claude Opus 4.6, Sonnet 4.6, Sonnet 4.5, Haiku 4.5 |
+| **OpenAI** | GPT-5.2, GPT-5.2 Pro, GPT-4.1, GPT-4.1 Mini, GPT-4.1 Nano, GPT-4o, GPT-4o Mini, o3, o3-mini, o4-mini |
+| **Google** | Gemini 2.5 Pro, Gemini 2.5 Flash, Gemini 2.5 Flash Lite |
+| **xAI** | Grok-4, Grok-3, Grok-3 Mini |
+| **DeepSeek** | DeepSeek V3 (Chat), DeepSeek R1 (Reasoner) |
+| **Mistral** | Mistral Large, Mistral Medium, Mistral Small, Codestral |
+| **Together AI** | Llama 4 Maverick, Llama 4 Scout |
+| **Cohere** | Command A, Command R+ |
 
-## Prerequisites
-
-- **macOS** 10.15 (Catalina) or later
-- **Rust** 1.77+ - [Install via rustup](https://rustup.rs/)
-- **Node.js** 18+ - [Download](https://nodejs.org/)
-- **Tauri CLI** v2 - `cargo install tauri-cli --version "^2"`
+> Bring your own API keys. Each key is stored locally in the macOS Keychain — never sent anywhere except the provider's own API.
 
 ## Quick Start
 
+### Prerequisites
+
+- **macOS** 10.15 (Catalina) or later
+- **Rust** 1.77+ &mdash; [install via rustup](https://rustup.rs/)
+- **Node.js** 18+ &mdash; [download](https://nodejs.org/)
+- **Tauri CLI** v2 &mdash; `cargo install tauri-cli --version "^2"`
+
+### Run
+
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/council-of-ai-agents.git
-cd council-of-ai-agents
-
-# Install frontend dependencies
+git clone https://github.com/mahatab/Council-of-AI-Agents.git
+cd Council-of-AI-Agents
 npm install
-
-# Run in development mode
 cargo tauri dev
 ```
 
-The app will open with a setup wizard to configure your council models and API keys.
+A setup wizard will guide you through configuring your council models and API keys on first launch.
 
 ## Building
 
 ```bash
-# Production build (creates .app bundle)
+# Production build — creates a .app bundle
 cargo tauri build
 
-# The .app will be in src-tauri/target/release/bundle/macos/
+# Output: src-tauri/target/release/bundle/macos/Synod.app
 ```
 
-### Building with Xcode
+An Xcode project (`CouncilOfAIAgents.xcodeproj`) is also included with dev and build schemes.
 
-Open `CouncilOfAIAgents.xcodeproj` in Xcode:
-- **Dev scheme** - Runs `cargo tauri dev` for development with hot-reload
-- **Build scheme** - Runs `cargo tauri build` for production builds
-
-## Project Structure
+## Architecture
 
 ```
-council-of-ai-agents/
-├── src/                    # React frontend (TypeScript)
-│   ├── components/         # UI components
-│   ├── stores/             # Zustand state management
-│   ├── hooks/              # Custom React hooks
-│   ├── lib/                # Utility functions
-│   └── types/              # TypeScript definitions
-├── src-tauri/              # Rust backend
-│   ├── src/
-│   │   ├── commands/       # Tauri IPC commands
-│   │   ├── providers/      # AI API integrations
-│   │   └── models/         # Data structures
-│   └── Cargo.toml
-├── docs/                   # Documentation
-└── CouncilOfAIAgents.xcodeproj/  # Xcode project
+src/                          React + TypeScript frontend
+├── components/
+│   ├── chat/                 ChatView, ModelResponse, MasterVerdict,
+│   │                         MentionDropdown, FollowUpQuestion, StreamingText
+│   ├── settings/             ModelManager, ApiKeyManager, Appearance, Advanced
+│   ├── setup/                First-run wizard
+│   └── common/               Button, Toggle, Modal
+├── stores/                   Zustand stores (council, settings, session)
+├── lib/                      Tauri IPC bindings, theme, markdown
+└── types/                    TypeScript definitions
+
+src-tauri/                    Rust backend
+├── commands/                 stream_chat, keychain, sessions, settings
+├── providers/                8 provider integrations with shared SSE parser
+└── models/                   Config, session, discussion entry types
 ```
 
-## Tech Stack
+### Tech Stack
 
-- **Tauri v2** - Desktop framework (Rust + WebView)
-- **React 18** + TypeScript - Frontend UI
-- **Tailwind CSS v4** - Styling
-- **Zustand** - State management
-- **macOS Keychain** - Secure API key storage
-- **Framer Motion** - Animations
+| Layer | Technology |
+|-------|-----------|
+| Desktop framework | Tauri v2 (Rust + native WebView) |
+| Frontend | React 19, TypeScript 5.9 |
+| Styling | Tailwind CSS v4 |
+| State management | Zustand |
+| Animations | Framer Motion |
+| Drag-and-drop | dnd-kit |
+| Markdown | react-markdown + react-syntax-highlighter |
+| API key storage | macOS Keychain (security-framework) |
+| HTTP streaming | reqwest + tokio-stream with SSE line buffering |
+
+## Documentation
+
+Detailed docs live in the [`docs/`](docs/) directory:
+
+- [Architecture](docs/ARCHITECTURE.md) — system design, state machine, streaming pipeline
+- [API Providers](docs/API_PROVIDERS.md) — endpoints, auth methods, streaming formats
+- [Adding Providers](docs/ADDING_PROVIDERS.md) — step-by-step guide to add new AI providers
+- [Setup Guide](docs/SETUP_GUIDE.md) — installation and configuration walkthrough
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, code style, and PR guidelines.
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT &mdash; see [LICENSE](LICENSE) for details.
