@@ -1,19 +1,21 @@
-use security_framework::passwords::{
-    delete_generic_password, get_generic_password, set_generic_password,
-};
 use std::collections::HashMap;
 use std::sync::Mutex;
 use tauri::{command, State};
 
-/// Single keychain entry that stores all API keys as JSON
-const KEYCHAIN_SERVICE: &str = "com.council-of-ai-agents.keys";
-const KEYCHAIN_ACCOUNT: &str = "api-keys";
+#[cfg(target_os = "macos")]
+use super::keychain_macos as platform;
+#[cfg(target_os = "windows")]
+use super::keychain_windows as platform;
 
-/// Legacy per-provider keychain account name
-const LEGACY_ACCOUNT: &str = "api-key";
+/// Single credential entry that stores all API keys as JSON
+pub const KEYCHAIN_SERVICE: &str = "com.council-of-ai-agents.keys";
+pub const KEYCHAIN_ACCOUNT: &str = "api-keys";
 
-/// Legacy per-provider service names for migration
-const LEGACY_SERVICES: &[(&str, &str)] = &[
+/// Legacy per-provider keychain account name (macOS migration only)
+pub const LEGACY_ACCOUNT: &str = "api-key";
+
+/// Legacy per-provider service names for migration (macOS migration only)
+pub const LEGACY_SERVICES: &[(&str, &str)] = &[
     ("anthropic", "com.council-of-ai-agents.anthropic"),
     ("openai", "com.council-of-ai-agents.openai"),
     ("google", "com.council-of-ai-agents.google"),
@@ -47,49 +49,6 @@ fn extract_provider(service: &str) -> String {
         .to_string()
 }
 
-/// Read the single JSON blob from keychain and parse into a HashMap.
-fn read_keychain_blob() -> HashMap<String, String> {
-    match get_generic_password(KEYCHAIN_SERVICE, KEYCHAIN_ACCOUNT) {
-        Ok(bytes) => {
-            let json_str = String::from_utf8(bytes.to_vec()).unwrap_or_default();
-            serde_json::from_str(&json_str).unwrap_or_default()
-        }
-        Err(_) => HashMap::new(),
-    }
-}
-
-/// Write the full HashMap as a JSON blob to the single keychain entry.
-fn write_keychain_blob(keys: &HashMap<String, String>) -> Result<(), String> {
-    let json = serde_json::to_string(keys)
-        .map_err(|e| format!("Failed to serialize API keys: {}", e))?;
-
-    // Delete existing entry first to avoid duplicates
-    let _ = delete_generic_password(KEYCHAIN_SERVICE, KEYCHAIN_ACCOUNT);
-
-    set_generic_password(KEYCHAIN_SERVICE, KEYCHAIN_ACCOUNT, json.as_bytes())
-        .map_err(|e| format!("Failed to save API keys to Keychain: {}", e))
-}
-
-/// Migrate old per-provider keychain entries into the new single entry.
-/// Returns any keys found in the legacy entries.
-fn migrate_legacy_keys() -> HashMap<String, String> {
-    let mut migrated = HashMap::new();
-
-    for (provider, service) in LEGACY_SERVICES {
-        if let Ok(bytes) = get_generic_password(service, LEGACY_ACCOUNT) {
-            if let Ok(key) = String::from_utf8(bytes.to_vec()) {
-                if !key.is_empty() {
-                    migrated.insert(provider.to_string(), key);
-                }
-            }
-            // Clean up old entry
-            let _ = delete_generic_password(service, LEGACY_ACCOUNT);
-        }
-    }
-
-    migrated
-}
-
 /// Ensure cache is populated. Called once on first access.
 fn ensure_loaded(cache: &ApiKeyCache) -> HashMap<String, String> {
     let mut guard = cache.keys.lock().unwrap();
@@ -98,15 +57,14 @@ fn ensure_loaded(cache: &ApiKeyCache) -> HashMap<String, String> {
         return keys.clone();
     }
 
-    // Try reading the new single entry
-    let mut keys = read_keychain_blob();
+    // Try reading the credential store
+    let mut keys = platform::read_keychain_blob();
 
-    // If empty, try migrating legacy per-provider entries
+    // If empty, try migrating legacy entries (macOS only; no-op on Windows)
     if keys.is_empty() {
-        let legacy = migrate_legacy_keys();
+        let legacy = platform::migrate_legacy_keys();
         if !legacy.is_empty() {
-            // Save migrated keys to the new single entry
-            let _ = write_keychain_blob(&legacy);
+            let _ = platform::write_keychain_blob(&legacy);
             keys = legacy;
         }
     }
@@ -121,7 +79,7 @@ pub fn save_api_key(service: String, api_key: String, cache: State<ApiKeyCache>)
     let mut keys = ensure_loaded(&cache);
 
     keys.insert(provider, api_key);
-    write_keychain_blob(&keys)?;
+    platform::write_keychain_blob(&keys)?;
 
     // Update cache
     let mut guard = cache.keys.lock().unwrap();
@@ -143,7 +101,7 @@ pub fn delete_api_key(service: String, cache: State<ApiKeyCache>) -> Result<(), 
     let mut keys = ensure_loaded(&cache);
 
     keys.remove(&provider);
-    write_keychain_blob(&keys)?;
+    platform::write_keychain_blob(&keys)?;
 
     // Update cache
     let mut guard = cache.keys.lock().unwrap();
