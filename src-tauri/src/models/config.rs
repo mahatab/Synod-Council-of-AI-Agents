@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
+#[allow(clippy::upper_case_acronyms)]
 pub enum Provider {
     Anthropic,
     OpenAI,
@@ -58,59 +59,39 @@ pub struct MasterModelConfig {
     pub model: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum SystemPromptMode {
+    #[default]
     Upfront,
     Dynamic,
 }
 
-impl Default for SystemPromptMode {
-    fn default() -> Self {
-        SystemPromptMode::Upfront
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ThemeMode {
     Light,
     Dark,
+    #[default]
     System,
 }
 
-impl Default for ThemeMode {
-    fn default() -> Self {
-        ThemeMode::System
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CursorStyle {
     Ripple,
     Breathing,
+    #[default]
     Orbit,
     Multi,
 }
 
-impl Default for CursorStyle {
-    fn default() -> Self {
-        CursorStyle::Orbit
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum DiscussionDepth {
+    #[default]
     Thorough,
     Concise,
-}
-
-impl Default for DiscussionDepth {
-    fn default() -> Self {
-        DiscussionDepth::Thorough
-    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

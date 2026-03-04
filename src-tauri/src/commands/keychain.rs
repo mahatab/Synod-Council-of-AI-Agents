@@ -12,9 +12,11 @@ pub const KEYCHAIN_SERVICE: &str = "com.council-of-ai-agents.keys";
 pub const KEYCHAIN_ACCOUNT: &str = "api-keys";
 
 /// Legacy per-provider keychain account name (macOS migration only)
+#[cfg(target_os = "macos")]
 pub const LEGACY_ACCOUNT: &str = "api-key";
 
 /// Legacy per-provider service names for migration (macOS migration only)
+#[cfg(target_os = "macos")]
 pub const LEGACY_SERVICES: &[(&str, &str)] = &[
     ("anthropic", "com.council-of-ai-agents.anthropic"),
     ("openai", "com.council-of-ai-agents.openai"),
