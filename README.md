@@ -18,7 +18,7 @@
 
 ---
 
-Synode is a desktop app for **macOS and Windows** that assembles a **council of AI models** to collaboratively tackle your questions. Multiple models from different providers discuss the topic - either sequentially (building on each other) or independently (preventing groupthink) - then a **master model** synthesizes everything into a clear, actionable verdict.
+Synode is a desktop app for **macOS and Windows** that assembles a **council of AI models** to collaboratively tackle your questions. Multiple models from different providers discuss the topic - either sequentially (building on each other) or independently (preventing groupthink) - then a **master model** synthesizes everything into a clear, actionable verdict. You can also switch to **Direct Chat** mode for 1-on-1 conversations with any individual model.
 
 ## How It Works
 <img src="docs/images/pixel-art-flowchart.jpg" alt="Pixel art flowchart showing how Synode works: a user asks a question at the top, five AI council models discuss it sequentially in the middle, a crowned master model delivers the final verdict below, and a looping arrow with an @ symbol shows that users can follow up with any model afterward."/>
@@ -27,11 +27,21 @@ You ask a question, and your council of AI models responds one by one. In **Sequ
 
 ## Features
 
+### Two Modes
+- **Council Mode** — assemble a panel of AI models for collaborative discussion and a synthesized verdict
+- **Direct Chat** — 1-on-1 conversations with any of 29 models across 8 providers, with multi-turn history and streaming
+
 ### Council Discussion
 - **8 providers, 29 models** — Anthropic, OpenAI, Google, xAI, DeepSeek, Mistral, Together AI, and Cohere
 - **Discussion styles** — Sequential (each model builds on previous responses) or Independent (each model responds without seeing others, preventing groupthink)
 - **Master verdict** — a designated model synthesizes all opinions into a final recommendation
 - **Clarifying questions** — the first council member can ask up to 2 clarifying questions before proceeding
+
+### Direct Chat
+- **Agent picker** — searchable grid of all available models, sorted by API key availability
+- **Multi-turn conversations** — full conversation history with streaming responses
+- **Auto-save** — sessions are saved after every response with AI-generated titles
+- **Provider color coding** — each model is visually identified by its provider
 
 ### Follow-Up @Mentions
 - After the verdict, type **`@`** to mention any council member or the master model
@@ -135,14 +145,15 @@ cargo tauri build
 ```
 src/                          React + TypeScript frontend
 ├── components/
-│   ├── chat/                 ChatView, ModelResponse, MasterVerdict,
-│   │                         MentionDropdown, FollowUpQuestion, StreamingText,
+│   ├── chat/                 ChatView, DirectChatView, AgentPicker,
+│   │                         ModelResponse, MasterVerdict, MentionDropdown,
+│   │                         FollowUpQuestion, StreamingText, ModeToggle,
 │   │                         DiscussionSettingsBar
 │   ├── settings/             ModelManager, ApiKeyManager, Appearance, Advanced
 │   ├── setup/                First-run wizard
 │   └── common/               Button, Toggle, Modal
-├── stores/                   Zustand stores (council, settings, session)
-├── lib/                      Tauri IPC bindings, theme, markdown
+├── stores/                   Zustand stores (council, directChat, settings, session)
+├── lib/                      Tauri IPC bindings, theme, markdown, sessionTitle
 └── types/                    TypeScript definitions
 
 src-tauri/                    Rust backend

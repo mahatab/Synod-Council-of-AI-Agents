@@ -2,38 +2,40 @@
 
 ## Overview
 
-Council of AI Agents (Synode) is a Tauri v2 desktop application with a Rust backend and React frontend. It orchestrates discussions across 8 AI providers, where council models discuss a user's question sequentially before a master model delivers a final verdict.
+Council of AI Agents (Synode) is a Tauri v2 desktop application with a Rust backend and React frontend. It operates in two modes: **Council Mode**, where multiple AI models discuss a user's question before a master model delivers a final verdict, and **Direct Chat**, for 1-on-1 conversations with any individual model. Both modes share the same streaming infrastructure across 8 AI providers.
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│                    React Frontend                        │
-│  ┌───────────┐  ┌───────────┐  ┌────────┐  ┌─────────┐ │
-│  │ ChatView  │  │ Settings  │  │Sidebar │  │ Setup   │ │
-│  └─────┬─────┘  └─────┬─────┘  └───┬────┘  │ Wizard  │ │
-│        │              │             │       └────┬────┘ │
-│  ┌─────┴──────────────┴─────────────┴────────────┴───┐  │
-│  │              Zustand Stores                       │  │
-│  │  councilStore │ settingsStore │ sessionStore      │  │
-│  └──────────────────────┬────────────────────────────┘  │
-│                         │ invoke() / listen()           │
-├─────────────────────────┼────────────────────────────────┤
-│                         │ Tauri IPC Bridge              │
-├─────────────────────────┼────────────────────────────────┤
-│                    Rust Backend                          │
-│  ┌──────────────────────┴────────────────────────────┐  │
-│  │                   Commands                        │  │
-│  │  api_calls │ keychain │ sessions │ settings       │  │
-│  └──────────────────────┬────────────────────────────┘  │
-│  ┌──────────────────────┴────────────────────────────┐  │
-│  │                   Providers                       │  │
-│  │  anthropic │ openai │ google  │ xai               │  │
-│  │  deepseek  │ mistral│ together│ cohere            │  │
-│  └───────────────────────────────────────────────────┘  │
-│  ┌───────────────────────────────────────────────────┐  │
-│  │   Credential Store (platform) │ File I/O         │  │
-│  │   macOS: Keychain │ Windows: Credential Manager   │  │
-│  └───────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                       React Frontend                         │
+│  ┌───────────┐  ┌────────────┐  ┌──────────┐  ┌──────────┐  │
+│  │ ChatView  │  │ DirectChat │  │ Settings │  │ Sidebar  │  │
+│  │ (Council) │  │  View      │  │          │  │          │  │
+│  └─────┬─────┘  └─────┬──────┘  └────┬─────┘  │ Setup    │  │
+│        │              │              │        │ Wizard   │  │
+│  ┌─────┴──────────────┴──────────────┴────────┴──────────┐  │
+│  │                  Zustand Stores                       │  │
+│  │  councilStore │ directChatStore │ settingsStore │      │  │
+│  │  sessionStore                                        │  │
+│  └──────────────────────┬────────────────────────────────┘  │
+│                         │ invoke() / listen()                │
+├─────────────────────────┼────────────────────────────────────┤
+│                         │ Tauri IPC Bridge                   │
+├─────────────────────────┼────────────────────────────────────┤
+│                       Rust Backend                           │
+│  ┌──────────────────────┴────────────────────────────────┐  │
+│  │                   Commands                            │  │
+│  │  api_calls │ keychain │ sessions │ settings            │  │
+│  └──────────────────────┬────────────────────────────────┘  │
+│  ┌──────────────────────┴────────────────────────────────┐  │
+│  │                   Providers                           │  │
+│  │  anthropic │ openai │ google  │ xai                    │  │
+│  │  deepseek  │ mistral│ together│ cohere                 │  │
+│  └───────────────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │   Credential Store (platform) │ File I/O              │  │
+│  │   macOS: Keychain │ Windows: Credential Manager       │  │
+│  └───────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 ## Council Discussion State Machine
@@ -59,6 +61,24 @@ IDLE ──► USER_INPUT ──► GENERATING_SYSTEM_PROMPTS ──► MODEL_TU
 ```
 
 **States**: `idle`, `user_input`, `generating_system_prompts`, `model_turn`, `clarifying_qa`, `master_verdict`, `complete`, `follow_up`, `error`
+
+## Direct Chat State Machine
+
+```
+IDLE ──► STREAMING ──► IDLE
+              │
+            ERROR
+```
+
+**States**: `idle`, `streaming`, `error`
+
+### Direct Chat Flow
+
+1. **Agent Selection** — User picks a model from the agent picker grid (searchable, sorted by API key availability)
+2. **Message Send** — User types a message; a session is auto-created on the first message
+3. **Streaming** — Response streams in real-time via the same SSE infrastructure used by Council mode
+4. **Multi-turn** — Full conversation history is sent with each request for contextual responses
+5. **Auto-save** — Session is saved after each response with an AI-generated title
 
 ### Discussion Flow
 
@@ -105,17 +125,21 @@ IDLE ──► USER_INPUT ──► GENERATING_SYSTEM_PROMPTS ──► MODEL_TU
 ### Stores (Zustand)
 
 - **councilStore** — Orchestrates the entire discussion state machine: model turns, streaming, clarifying Q&A, master verdict, and follow-up questions
-- **settingsStore** — Loads/saves `AppSettings` (council models, master model, theme, system prompt mode, discussion depth, cursor style, session path)
-- **sessionStore** — Session CRUD: create, load, list, save, delete. Groups sessions by date in the sidebar
+- **directChatStore** — Manages 1-on-1 conversations: streaming state, message send/receive, error handling
+- **settingsStore** — Loads/saves `AppSettings` (council models, master model, theme, system prompt mode, discussion depth, cursor style, session path, app mode)
+- **sessionStore** — Session CRUD: create, load, list, save, delete. Groups sessions by date in the sidebar. Filters by active app mode (council vs direct chat)
 
 ### Key Components
 
 - **SetupWizard** — First-run flow: welcome → model selection → API keys → master model → complete
-- **ChatView** — Main discussion interface with streaming text, `@mention` dropdown for follow-ups
+- **ChatView** — Council discussion interface with streaming text, `@mention` dropdown for follow-ups
+- **DirectChatView** — 1-on-1 chat interface with multi-turn conversation history
+- **AgentPicker** — Searchable model selection grid with provider color coding and API key availability
 - **ModelResponse** / **MasterVerdict** — Display model outputs with provider colors, copy buttons
 - **ClarifyingQuestion** — UI for answering the first model's clarifying questions
 - **SettingsModal** — Tabbed settings: Models (drag-drop reorder), API Keys, Appearance, Advanced, Sessions
-- **Sidebar** — Session history grouped by date (Today, Yesterday, Previous 7 Days, etc.)
+- **Sidebar** — Session history grouped by date (Today, Yesterday, Previous 7 Days, etc.), filtered by active mode
+- **ModeToggle** — Switches between Council and Direct Chat modes
 
 ### Settings
 
@@ -130,4 +154,7 @@ interface AppSettings {
   sessionSavePath: string | null;       // Custom session storage path
   setupCompleted: boolean;
 }
+
+// App-level mode (stored in settingsStore, not persisted)
+type AppMode = 'council' | 'direct_chat';
 ```
