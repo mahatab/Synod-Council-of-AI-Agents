@@ -4,13 +4,17 @@ import { getCurrentWindow } from '@tauri-apps/api/window';
 import {
   Plus,
   MessageSquare,
+  MessageCircle,
   Trash2,
   Search,
   X,
 } from 'lucide-react';
+import ModeToggle from '../common/ModeToggle';
 import { useSessionStore } from '../../stores/sessionStore';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { useCouncilStore } from '../../stores/councilStore';
+import { useDirectChatStore } from '../../stores/directChatStore';
+import type { AppMode } from '../../types';
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -51,7 +55,10 @@ export default function Sidebar() {
   const { sessions, activeSession, loadSessions, loadAndSetSession, setActiveSession, deleteSession } =
     useSessionStore();
   const sessionSavePath = useSettingsStore((s) => s.settings.sessionSavePath);
+  const appMode = useSettingsStore((s) => s.appMode);
+  const setAppMode = useSettingsStore((s) => s.setAppMode);
   const councilReset = useCouncilStore((s) => s.reset);
+  const directChatReset = useDirectChatStore((s) => s.reset);
 
   useEffect(() => {
     loadSessions(sessionSavePath);
@@ -60,6 +67,14 @@ export default function Sidebar() {
   const handleNewSession = () => {
     setActiveSession(null);
     councilReset();
+    directChatReset();
+  };
+
+  const handleModeChange = (mode: AppMode) => {
+    setAppMode(mode);
+    setActiveSession(null);
+    councilReset();
+    directChatReset();
   };
 
   const handleSelectSession = (sessionId: string) => {
@@ -75,9 +90,12 @@ export default function Sidebar() {
 
   const [search, setSearch] = useState('');
 
+  const modeFiltered = sessions.filter(
+    (s) => (s.sessionType ?? 'council') === appMode,
+  );
   const filtered = search.trim()
-    ? sessions.filter((s) => s.title.toLowerCase().includes(search.toLowerCase()))
-    : sessions;
+    ? modeFiltered.filter((s) => s.title.toLowerCase().includes(search.toLowerCase()))
+    : modeFiltered;
   const grouped = groupSessions(filtered);
 
   return (
@@ -87,6 +105,11 @@ export default function Sidebar() {
         onMouseDown={() => getCurrentWindow().startDragging()}
         className="titlebar-drag-region h-12 flex-shrink-0"
       />
+
+      {/* Mode toggle */}
+      <div className="px-3 pb-2">
+        <ModeToggle mode={appMode} onChange={handleModeChange} />
+      </div>
 
       {/* New session button */}
       <div className="px-3 pb-2">
@@ -145,7 +168,11 @@ export default function Sidebar() {
                       : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-primary)]'
                   }`}
                 >
-                  <MessageSquare size={14} className="flex-shrink-0 opacity-50" />
+                  {appMode === 'direct_chat' ? (
+                    <MessageCircle size={14} className="flex-shrink-0 opacity-50" />
+                  ) : (
+                    <MessageSquare size={14} className="flex-shrink-0 opacity-50" />
+                  )}
                   <span className="flex-1 truncate">{session.title}</span>
                   <button
                     onClick={(e) => handleDeleteSession(e, session.id)}
@@ -159,14 +186,16 @@ export default function Sidebar() {
           ))}
         </AnimatePresence>
 
-        {sessions.length === 0 && (
+        {modeFiltered.length === 0 && (
           <p className="px-3 py-8 text-xs text-center text-[var(--color-text-tertiary)]">
-            No sessions yet.
-            <br />
-            Start a conversation!
+            {appMode === 'direct_chat' ? (
+              <>No direct chats yet.<br />Select a model to start!</>
+            ) : (
+              <>No sessions yet.<br />Start a conversation!</>
+            )}
           </p>
         )}
-        {sessions.length > 0 && filtered.length === 0 && (
+        {modeFiltered.length > 0 && filtered.length === 0 && (
           <p className="px-3 py-8 text-xs text-center text-[var(--color-text-tertiary)]">
             No sessions found.
           </p>

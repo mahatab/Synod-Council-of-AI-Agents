@@ -64,6 +64,7 @@ pub fn list_sessions(custom_path: Option<String>) -> Result<Vec<SessionSummary>,
                         title: session.title,
                         created_at: session.created_at,
                         updated_at: session.updated_at,
+                        session_type: session.session_type,
                     });
                 }
             }
