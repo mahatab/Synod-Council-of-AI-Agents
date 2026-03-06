@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { AppSettings, ThemeMode } from '../types';
+import type { AppMode, AppSettings, ThemeMode } from '../types';
 import * as tauri from '../lib/tauri';
 import { applyTheme, watchSystemTheme } from '../lib/theme';
 
@@ -7,10 +7,12 @@ interface SettingsState {
   settings: AppSettings;
   loaded: boolean;
   loading: boolean;
+  appMode: AppMode;
 
   loadSettings: () => Promise<void>;
   updateSettings: (partial: Partial<AppSettings>) => Promise<void>;
   setTheme: (theme: ThemeMode) => Promise<void>;
+  setAppMode: (mode: AppMode) => void;
 }
 
 const defaultSettings: AppSettings = {
@@ -29,6 +31,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   settings: defaultSettings,
   loaded: false,
   loading: false,
+  appMode: 'council' as AppMode,
 
   loadSettings: async () => {
     set({ loading: true });
@@ -61,5 +64,9 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     const updated = { ...current, theme };
     set({ settings: updated });
     await tauri.saveSettings(updated);
+  },
+
+  setAppMode: (mode) => {
+    set({ appMode: mode });
   },
 }));

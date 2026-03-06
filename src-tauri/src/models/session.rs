@@ -4,6 +4,33 @@ use uuid::Uuid;
 
 use super::config::{MasterModelConfig, ModelConfig, SystemPromptMode, UsageData};
 
+#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum SessionType {
+    #[default]
+    Council,
+    DirectChat,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct DirectChatMessage {
+    pub role: String,
+    pub content: String,
+    pub timestamp: DateTime<Utc>,
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub usage: Option<UsageData>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct DirectChatAgent {
+    pub provider: String,
+    pub model: String,
+    pub display_name: String,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ClarifyingExchange {
@@ -78,6 +105,14 @@ pub struct Session {
     pub user_question: String,
     pub council_config: CouncilConfig,
     pub discussion: Vec<DiscussionEntry>,
+    #[serde(default)]
+    pub session_type: SessionType,
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_chat_agent: Option<DirectChatAgent>,
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_chat_messages: Option<Vec<DirectChatMessage>>,
 }
 
 #[allow(dead_code)]
@@ -95,6 +130,9 @@ impl Session {
             user_question,
             council_config,
             discussion: vec![],
+            session_type: SessionType::Council,
+            direct_chat_agent: None,
+            direct_chat_messages: None,
         }
     }
 }
@@ -116,4 +154,6 @@ pub struct SessionSummary {
     pub title: String,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
+    #[serde(default)]
+    pub session_type: SessionType,
 }

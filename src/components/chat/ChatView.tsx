@@ -15,8 +15,9 @@ import Button from '../common/Button';
 import { useCouncilStore } from '../../stores/councilStore';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { useSessionStore } from '../../stores/sessionStore';
-import { getApiKey, streamChat, onStreamToken } from '../../lib/tauri';
-import type { DiscussionEntry, Provider, Session } from '../../types';
+import { getApiKey } from '../../lib/tauri';
+import { generateSessionTitle } from '../../lib/sessionTitle';
+import type { DiscussionEntry, Session } from '../../types';
 
 export default function ChatView() {
   const [input, setInput] = useState('');
@@ -82,40 +83,16 @@ export default function ChatView() {
     [],
   );
 
-  // Step 5: Generate smart session title via master model
-  const generateSessionTitle = useCallback(async (question: string) => {
+  // Generate smart session title via master model
+  const generateTitle = useCallback(async (question: string) => {
     try {
-      const currentSettings = settingsRef.current;
-      const masterApiKey = await getApiKey(
-        `com.council-of-ai-agents.${currentSettings.masterModel.provider}`,
-      );
-      if (!masterApiKey) return;
-
-      const streamId = uuidv4();
-      const unlisten = await onStreamToken(streamId, () => {});
-      const result = await streamChat(
-        currentSettings.masterModel.provider as Provider,
-        currentSettings.masterModel.model,
-        [
-          {
-            role: 'user',
-            content: `Generate a short, descriptive title (5-8 words max, no quotes, no punctuation at the end) for this conversation:\n\n"${question}"`,
-          },
-        ],
-        'You generate concise conversation titles. Return ONLY the title text, nothing else.',
-        masterApiKey,
-        streamId,
-      );
-      unlisten();
-
-      const cleanTitle = result.content.trim().replace(/^["']|["']$/g, '');
-      if (cleanTitle) {
-        updateSessionRef.current({ title: cleanTitle });
+      const title = await generateSessionTitle(question, settingsRef.current);
+      if (title) {
+        updateSessionRef.current({ title });
         saveSessionRef.current(settingsRef.current.sessionSavePath).catch(console.error);
       }
     } catch (err) {
       console.error('Failed to generate session title:', err);
-      // Placeholder title remains — no user impact
     }
   }, []);
 
@@ -211,7 +188,7 @@ export default function ChatView() {
     }
 
     // Generate smart title in the background (fire-and-forget)
-    generateSessionTitle(question);
+    generateTitle(question);
 
     // Run the council discussion (each entry auto-saves via handleEntryComplete)
     await council.startDiscussion(

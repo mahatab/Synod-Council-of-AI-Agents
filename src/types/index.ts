@@ -97,6 +97,25 @@ export type DiscussionEntry =
   | DiscussionEntryFollowUpQuestion
   | DiscussionEntryFollowUpAnswer;
 
+export type SessionType = 'council' | 'direct_chat';
+
+export type AppMode = 'council' | 'direct_chat';
+
+export type DirectChatState = 'idle' | 'streaming' | 'error';
+
+export interface DirectChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+  usage?: UsageData;
+}
+
+export interface DirectChatAgent {
+  provider: string;
+  model: string;
+  displayName: string;
+}
+
 export interface CouncilConfig {
   models: ModelConfig[];
   masterModel: MasterModelConfig;
@@ -111,6 +130,9 @@ export interface Session {
   userQuestion: string;
   councilConfig: CouncilConfig;
   discussion: DiscussionEntry[];
+  sessionType?: SessionType;
+  directChatAgent?: DirectChatAgent;
+  directChatMessages?: DirectChatMessage[];
 }
 
 export interface SessionSummary {
@@ -118,6 +140,7 @@ export interface SessionSummary {
   title: string;
   createdAt: string;
   updatedAt: string;
+  sessionType?: SessionType;
 }
 
 export interface StreamToken {
