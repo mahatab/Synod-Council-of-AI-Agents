@@ -70,17 +70,17 @@ You ask a question, and your council of AI models responds one by one. In **Sequ
 ## Screenshots
 
 <p align="center">
-  <img src="docs/images/screenshots/hero.png" alt="Synode app showing a council discussion with multiple AI models and a master verdict" width="700" />
+  <img src="docs/images/screenshots/hero-2.png" alt="Synode app showing a council discussion with multiple AI models and a master verdict" width="700" />
 </p>
 <p align="center"><em>Many models, one verdict — watch your council think through the problem, then @mention anyone to keep talking</em></p>
 
 <p align="center">
-  <img src="docs/images/screenshots/settings.png" alt="Synode settings panel showing model configuration" width="700" />
+  <img src="docs/images/screenshots/settings-2.png" alt="Synode settings panel showing model configuration" width="700" />
 </p>
 <p align="center"><em>Configure your council — choose from 8 providers, 30+ models, with API keys secured in your OS credential store</em></p>
 
 <p align="center">
-  <img src="docs/images/screenshots/advanced-settings-2.png" alt="Synode advanced settings showing prompt engineering modes" width="700" />
+  <img src="docs/images/screenshots/advanced-settings-3.png" alt="Synode advanced settings showing prompt engineering modes" width="700" />
 </p>
 <p align="center"><em>Control your council with prompt engineering modes</em></p>
 
