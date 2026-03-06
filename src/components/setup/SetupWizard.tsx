@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft, Check } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Check, Info } from 'lucide-react';
 import Button from '../common/Button';
+import ApiKeyInfoPopover from '../settings/ApiKeyInfoPopover';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { PROVIDERS, getProviderColor } from '../../types';
 import type { Provider, ModelConfig, MasterModelConfig } from '../../types';
@@ -20,6 +21,7 @@ export default function SetupWizard() {
     provider: 'anthropic',
     model: 'claude-opus-4-6',
   });
+  const [openInfo, setOpenInfo] = useState<string | null>(null);
 
   const stepIndex = steps.indexOf(currentStep);
 
@@ -226,9 +228,25 @@ export default function SetupWizard() {
                       const provider = PROVIDERS.find((p) => p.id === providerId)!;
                       return (
                         <div key={providerId}>
-                          <label className="text-sm font-medium text-[var(--color-text-primary)] mb-1 block">
-                            {provider.name}
-                          </label>
+                          <div className="flex items-center justify-between mb-1">
+                            <label className="text-sm font-medium text-[var(--color-text-primary)]">
+                              {provider.name}
+                            </label>
+                            <div className="relative">
+                              <button
+                                onClick={() => setOpenInfo(openInfo === providerId ? null : providerId)}
+                                className="p-1.5 rounded-[var(--radius-sm)] text-[var(--color-text-tertiary)] hover:text-[var(--color-accent)] hover:bg-[var(--color-bg-hover)] transition-colors"
+                                title="How to get API key"
+                              >
+                                <Info size={14} />
+                              </button>
+                              <ApiKeyInfoPopover
+                                provider={provider}
+                                isOpen={openInfo === providerId}
+                                onClose={() => setOpenInfo(null)}
+                              />
+                            </div>
+                          </div>
                           <input
                             type="password"
                             value={apiKeys[providerId] || ''}
