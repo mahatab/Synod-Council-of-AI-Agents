@@ -42,17 +42,17 @@ You ask a question, and your council of AI models responds one by one. In **Sequ
 - **Auto-save** — sessions are saved after every response with AI-generated titles
 - **Provider color coding** — each model is visually identified by its provider
 
-### Follow-Up @Mentions (Council Mode)
+### Follow-Up @Mentions ![Council Mode](https://img.shields.io/badge/Council_Mode-orange)
 - After the verdict, type **`@`** to mention any council member or the master model
 - Ask follow-up questions with **full discussion context** — the model sees every response, not just its own
 - Cross-reference freely: *"@Grok what do you think about GPT's suggestion?"*
 - Chain unlimited follow-ups within the same session
 
-### Smart Prompt Engineering (Council Mode)
+### Smart Prompt Engineering ![Council Mode](https://img.shields.io/badge/Council_Mode-orange)
 - **Upfront mode** — master generates tailored system prompts for all council members before the discussion starts
 - **Dynamic mode** — master generates a custom prompt for each model right before its turn, incorporating context from previous responses
 
-### Discussion Depth
+### Discussion Depth ![Council Mode](https://img.shields.io/badge/Council_Mode-orange)
 - **Thorough** — detailed analysis with comprehensive reasoning
 - **Concise** — 2-3 key points per model, optimized for speed and cost
 - Active settings are always visible in the chat view with (i) tooltips explaining each option
@@ -98,7 +98,7 @@ You ask a question, and your council of AI models responds one by one. In **Sequ
 
 ### Demo
 
-▶️ [Watch the demo video](https://youtu.be/BvqSjLuyTaA?si=UF8waoQEv-GQ2JNj)
+▶️ [Watch the demo video](https://youtu.be/BvqSjLuyTaA?si=UF8waoQEv-GQ2JNj) *(recorded on an earlier version)*
 
 ## Supported Providers
 
