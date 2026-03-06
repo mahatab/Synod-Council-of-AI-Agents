@@ -83,6 +83,11 @@ You ask a question, and your council of AI models responds one by one. In **Sequ
 <p align="center"><em>Many models, one verdict — watch your council think through the problem, then @mention anyone to keep talking</em></p>
 
 <p align="center">
+  <img src="docs/images/screenshots/direct-chat.png" alt="Synode Direct Chat mode showing the agent picker with a searchable grid of AI models" width="700" />
+</p>
+<p align="center"><em>Direct Chat — pick any model for a 1-on-1 conversation, with all 29 models at your fingertips</em></p>
+
+<p align="center">
   <img src="docs/images/screenshots/settings-2.png" alt="Synode settings panel showing model configuration" width="700" />
 </p>
 <p align="center"><em>Configure your council — choose from 8 providers, 30+ models, with API keys secured in your OS credential store</em></p>
