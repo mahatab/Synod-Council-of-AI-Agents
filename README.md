@@ -23,7 +23,7 @@ Synod is a desktop app for **macOS and Windows** that assembles a **council of A
 ## How It Works
 <img src="docs/images/pixel-art-flowchart.jpg" alt="Pixel art flowchart showing how Synod works: a user asks a question at the top, five AI council models discuss it sequentially in the middle, a crowned master model delivers the final verdict below, and a looping arrow with an @ symbol shows that users can follow up with any model afterward."/>
 
-You ask a question, and your council of AI models responds one by one. In **Sequential** mode, each model sees the full discussion so far. In **Independent** mode, each model only sees your original question, giving you unbiased perspectives. Once everyone has weighed in, a master model synthesizes all perspectives into a clear, actionable verdict. After the verdict, @mention any model to ask follow-up questions with full context.
+You ask a question, and your council of AI models responds one by one. In **Sequential** mode (as shown above), each model sees the full discussion so far. In **Independent** mode, each model only sees your original question, giving you unbiased perspectives. Once everyone has weighed in, a master model synthesizes all perspectives into a clear, actionable verdict. After the verdict, @mention any model to ask follow-up questions with full context.
 
 ## Features
 
