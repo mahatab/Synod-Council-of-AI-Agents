@@ -76,6 +76,11 @@ export const useCouncilStore = create<CouncilStoreState>((set, get) => ({
   ) => {
     set({ state: 'user_input', error: null });
 
+    if (models.length === 0) {
+      set({ state: 'error', error: 'No council models configured.' });
+      return;
+    }
+
     // Add user entry
     onEntryComplete({ role: 'user', content: userQuestion });
 
@@ -112,7 +117,10 @@ export const useCouncilStore = create<CouncilStoreState>((set, get) => ({
 The following AI models will ${discussionStyle === 'independent' ? 'independently analyze' : 'discuss'} this question${discussionStyle === 'sequential' ? ' in order' : ''}:
 ${models.map((m, i) => `${i + 1}. ${m.displayName} (${m.provider})`).join('\n')}
 
-Generate a specific, tailored system prompt for EACH council model that helps them provide their best analysis. The first model (${models[0]?.displayName}) should be instructed that it MAY ask up to 2 clarifying questions if needed. All other models should be told they CANNOT ask questions.
+Generate a specific, tailored system prompt for EACH council model that helps them provide their best analysis.
+${discussionStyle !== 'independent'
+  ? `The first model (${models[0]?.displayName}) should be instructed that it MAY ask up to 2 clarifying questions if needed. All other models should be told they CANNOT ask questions.`
+  : 'None of the models should ask any clarifying questions — each provides a standalone independent analysis.'}
 ${styleInstruction}
 ${discussionDepth === 'concise' ? '\nIMPORTANT: Instruct each model to keep responses brief and focused — 2-3 key points maximum. No lengthy explanations.\n' : ''}
 Return your response in this exact JSON format:
@@ -184,6 +192,7 @@ ${JSON.stringify(
 
       const results: (DiscussionEntry | null)[] = models.map(() => null);
       const dynamicPromptUsages: (UsageData | undefined)[] = models.map(() => undefined);
+      const errorSet = new Set<number>();
 
       await Promise.allSettled(
         models.map(async (model, i) => {
@@ -192,6 +201,7 @@ ${JSON.stringify(
               `com.council-of-ai-agents.${model.provider}`,
             );
             if (!apiKey) {
+              errorSet.add(i);
               results[i] = {
                 role: 'model',
                 provider: model.provider,
@@ -211,41 +221,29 @@ ${JSON.stringify(
             );
 
             const systemPromptKey = `${model.provider}:${model.model}`;
+            // In parallel mode no model should ask clarifying questions (pass false for isFirst)
             let systemPrompt =
               get().systemPrompts.get(systemPromptKey) ||
-              getDefaultSystemPrompt(model, i === 0, discussionDepth, 'independent');
+              getDefaultSystemPrompt(model, false, discussionDepth, 'independent');
 
             // Dynamic mode: generate system prompt for this model
-            if (systemPromptMode === 'dynamic' && i > 0) {
+            if (systemPromptMode === 'dynamic') {
               try {
                 const masterApiKey = await getApiKey(
                   `com.council-of-ai-agents.${masterModel.provider}`,
                 );
                 if (masterApiKey) {
-                  const dynamicStreamId = uuidv4();
-                  const dynamicUnlisten = await tauri.onStreamToken(
-                    dynamicStreamId,
-                    () => {},
-                  );
-                  const dynamicResult = await tauri.streamChat(
+                  const dynamicResult = await fetchDynamicSystemPrompt(
                     masterModel.provider,
                     masterModel.model,
-                    [
-                      {
-                        role: 'user',
-                        content: `Generate a system prompt for ${model.displayName} to independently analyze: "${userQuestion}". The model is responding independently and will NOT see other models' responses. It should provide its own standalone analysis. Return only the system prompt text, no JSON.`,
-                      },
-                    ],
-                    'Generate a concise system prompt. Return only the prompt text.',
                     masterApiKey,
-                    dynamicStreamId,
+                    `Generate a system prompt for ${model.displayName} to independently analyze: "${userQuestion}". The model is responding independently and will NOT see other models' responses. It should provide its own standalone analysis. Return only the system prompt text, no JSON.`,
                   );
-                  dynamicUnlisten();
-                  systemPrompt = dynamicResult.content;
+                  systemPrompt = dynamicResult.prompt;
                   dynamicPromptUsages[i] = dynamicResult.usage;
                 }
-              } catch {
-                // Fall back to default prompt
+              } catch (err) {
+                console.warn(`Failed to generate dynamic system prompt for ${model.displayName}, using default.`, err);
               }
             }
 
@@ -282,6 +280,7 @@ ${JSON.stringify(
               usage: result.usage,
             };
           } catch (err) {
+            errorSet.add(i);
             results[i] = {
               role: 'model',
               provider: model.provider,
@@ -298,6 +297,16 @@ ${JSON.stringify(
         if (usage) {
           masterPromptGenUsage = combineUsage(masterPromptGenUsage, usage);
         }
+      }
+
+      // If every model failed there is nothing useful to synthesise
+      if (errorSet.size === models.length) {
+        set({
+          state: 'error',
+          error: 'All council models failed to respond.',
+          streamingContents: new Map(),
+        });
+        return;
       }
 
       // Emit results in deterministic index order
@@ -346,26 +355,13 @@ ${JSON.stringify(
                 `com.council-of-ai-agents.${masterModel.provider}`,
               );
               if (masterApiKey) {
-                const dynamicStreamId = uuidv4();
-                const dynamicUnlisten = await tauri.onStreamToken(
-                  dynamicStreamId,
-                  () => {},
-                );
-                const dynamicResult = await tauri.streamChat(
+                const dynamicResult = await fetchDynamicSystemPrompt(
                   masterModel.provider,
                   masterModel.model,
-                  [
-                    {
-                      role: 'user',
-                      content: `Generate a system prompt for ${model.displayName} to analyze: "${userQuestion}". Previous discussion: ${JSON.stringify(discussionSoFar)}. The model should provide a unique perspective. Return only the system prompt text, no JSON.`,
-                    },
-                  ],
-                  'Generate a concise system prompt. Return only the prompt text.',
                   masterApiKey,
-                  dynamicStreamId,
+                  `Generate a system prompt for ${model.displayName} to analyze: "${userQuestion}". Previous discussion: ${JSON.stringify(discussionSoFar)}. The model should provide a unique perspective. Return only the system prompt text, no JSON.`,
                 );
-                dynamicUnlisten();
-                systemPrompt = dynamicResult.content;
+                systemPrompt = dynamicResult.prompt;
                 // Accumulate dynamic prompt gen usage with master usage
                 if (dynamicResult.usage) {
                   if (!masterPromptGenUsage) {
@@ -766,6 +762,28 @@ function combineUsage(a?: UsageData, b?: UsageData): UsageData | undefined {
     inputTokens: (a?.inputTokens ?? 0) + (b?.inputTokens ?? 0),
     outputTokens: (a?.outputTokens ?? 0) + (b?.outputTokens ?? 0),
   };
+}
+
+async function fetchDynamicSystemPrompt(
+  masterProvider: Provider,
+  masterModelId: string,
+  masterApiKey: string,
+  promptContent: string,
+): Promise<{ prompt: string; usage?: UsageData }> {
+  const streamId = uuidv4();
+  // Tokens from this call are intentionally discarded — we only need the full
+  // completed text, not a live stream display, for system prompt generation.
+  const unlisten = await tauri.onStreamToken(streamId, () => {});
+  const result = await tauri.streamChat(
+    masterProvider,
+    masterModelId,
+    [{ role: 'user', content: promptContent }],
+    'Generate a concise system prompt. Return only the prompt text.',
+    masterApiKey,
+    streamId,
+  );
+  unlisten();
+  return { prompt: result.content, usage: result.usage };
 }
 
 function buildFollowUpMessages(

@@ -17,7 +17,40 @@ import { useSettingsStore } from '../../stores/settingsStore';
 import { useSessionStore } from '../../stores/sessionStore';
 import { getApiKey } from '../../lib/tauri';
 import { generateSessionTitle } from '../../lib/sessionTitle';
-import type { DiscussionEntry, Session } from '../../types';
+import { useShallow } from 'zustand/react/shallow';
+import type { DiscussionEntry, ModelConfig, Session } from '../../types';
+
+// Isolated child so that per-token Map updates only re-render this small subtree,
+// not the entire ChatView.
+function ParallelStreamingModels({
+  models,
+  scrollToBottom,
+}: {
+  models: ModelConfig[];
+  scrollToBottom: () => void;
+}) {
+  const streamingContents = useCouncilStore((s) => s.streamingContents);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [streamingContents, scrollToBottom]);
+
+  return (
+    <>
+      {models.map((model, i) => (
+        <ModelResponse
+          key={`parallel-streaming-${i}`}
+          provider={model.provider}
+          model={model.model}
+          displayName={model.displayName}
+          content={streamingContents.get(i) ?? ''}
+          isStreaming={true}
+          isThinking={!streamingContents.get(i)}
+        />
+      ))}
+    </>
+  );
+}
 
 export default function ChatView() {
   const [input, setInput] = useState('');
@@ -31,7 +64,21 @@ export default function ChatView() {
   const [mentionQuery, setMentionQuery] = useState('');
   const [selectedMention, setSelectedMention] = useState<MentionModel | null>(null);
 
-  const council = useCouncilStore();
+  const council = useCouncilStore(
+    useShallow((s) => ({
+      state: s.state,
+      currentModelIndex: s.currentModelIndex,
+      currentStreamContent: s.currentStreamContent,
+      clarifyingExchanges: s.clarifyingExchanges,
+      waitingForClarification: s.waitingForClarification,
+      followUpInProgress: s.followUpInProgress,
+      error: s.error,
+      submitClarification: s.submitClarification,
+      startDiscussion: s.startDiscussion,
+      sendFollowUp: s.sendFollowUp,
+      reset: s.reset,
+    })),
+  );
   const settings = useSettingsStore((s) => s.settings);
   const { activeSession, createSession, saveCurrentSession, updateActiveSession } =
     useSessionStore();
@@ -62,12 +109,19 @@ export default function ChatView() {
     entriesRef.current = entries;
   }, [entries]);
 
-  // Auto-scroll to bottom
-  useEffect(() => {
+  // Stable scroll-to-bottom helper; shared with the parallel streaming child.
+  // Empty deps array is intentional — scrollRef is a ref whose .current value
+  // doesn't need to be listed as a dependency (ref identity is stable).
+  const scrollToBottom = useCallback(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [entries, council.currentStreamContent, council.streamingContents, council.state]);
+  }, []);
+
+  // Auto-scroll to bottom (parallel streaming scroll is handled by ParallelStreamingModels)
+  useEffect(() => {
+    scrollToBottom();
+  }, [entries, council.currentStreamContent, council.state, scrollToBottom]);
 
   // Incremental auto-save after each entry
   const handleEntryComplete = useCallback(
@@ -397,19 +451,10 @@ export default function ChatView() {
             )}
 
             {council.state === 'parallel_model_turn' && (
-              <>
-                {settings.councilModels.map((model, i) => (
-                  <ModelResponse
-                    key={`parallel-streaming-${i}`}
-                    provider={model.provider}
-                    model={model.model}
-                    displayName={model.displayName}
-                    content={council.streamingContents.get(i) ?? ''}
-                    isStreaming={true}
-                    isThinking={!council.streamingContents.get(i)}
-                  />
-                ))}
-              </>
+              <ParallelStreamingModels
+                models={activeSession?.councilConfig.models ?? settings.councilModels}
+                scrollToBottom={scrollToBottom}
+              />
             )}
 
             {council.state === 'clarifying_qa' && council.waitingForClarification && (
@@ -513,7 +558,11 @@ export default function ChatView() {
           </div>
           {isProcessing && (
             <p className="mt-2 text-xs text-center text-[var(--color-text-tertiary)]">
-              {council.state === 'follow_up' ? 'Getting follow-up response...' : 'Council is deliberating...'}
+              {council.state === 'follow_up'
+                ? 'Getting follow-up response...'
+                : council.state === 'parallel_model_turn'
+                  ? 'Models responding in parallel...'
+                  : 'Council is deliberating...'}
             </p>
           )}
         </div>
