@@ -67,7 +67,7 @@ export default function ChatView() {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [entries, council.currentStreamContent, council.state]);
+  }, [entries, council.currentStreamContent, council.streamingContents, council.state]);
 
   // Incremental auto-save after each entry
   const handleEntryComplete = useCallback(
@@ -394,6 +394,22 @@ export default function ChatView() {
                 isStreaming={true}
                 isThinking={!council.currentStreamContent}
               />
+            )}
+
+            {council.state === 'parallel_model_turn' && (
+              <>
+                {settings.councilModels.map((model, i) => (
+                  <ModelResponse
+                    key={`parallel-streaming-${i}`}
+                    provider={model.provider}
+                    model={model.model}
+                    displayName={model.displayName}
+                    content={council.streamingContents.get(i) ?? ''}
+                    isStreaming={true}
+                    isThinking={!council.streamingContents.get(i)}
+                  />
+                ))}
+              </>
             )}
 
             {council.state === 'clarifying_qa' && council.waitingForClarification && (
