@@ -161,6 +161,7 @@ export type CouncilState =
   | 'user_input'
   | 'generating_system_prompts'
   | 'model_turn'
+  | 'parallel_model_turn'
   | 'clarifying_qa'
   | 'master_verdict'
   | 'complete'
