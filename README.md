@@ -23,7 +23,7 @@ Synode is a desktop app for **macOS and Windows** that assembles a **council of 
 ## How It Works
 <img src="docs/images/pixel-art-flowchart.jpg" alt="Pixel art flowchart showing how Synode works: a user asks a question at the top, five AI council models discuss it sequentially in the middle, a crowned master model delivers the final verdict below, and a looping arrow with an @ symbol shows that users can follow up with any model afterward."/>
 
-You ask a question, and your council of AI models responds one by one. In **Sequential** mode (as shown above), each model sees the full discussion so far. In **Independent** mode, each model only sees your original question, giving you unbiased perspectives. Once everyone has weighed in, a master model synthesizes all perspectives into a clear, actionable verdict. After the verdict, @mention any model to ask follow-up questions with full context.
+You ask a question, and your council of AI models responds. In **Sequential** mode (as shown above), each model sees the full discussion so far, responding one by one. In **Independent** mode, each model only sees your original question and responds **in parallel** for faster results and unbiased perspectives. Once everyone has weighed in, a master model synthesizes all perspectives into a clear, actionable verdict. After the verdict, @mention any model to ask follow-up questions with full context.
 
 ## Features
 
@@ -34,6 +34,7 @@ You ask a question, and your council of AI models responds one by one. In **Sequ
 ### Council Discussion
 - **8 providers, 29 models** — Anthropic, OpenAI, Google, xAI, DeepSeek, Mistral, Together AI, and Cohere
 - **Discussion styles** — Sequential (each model builds on previous responses) or Independent (each model responds without seeing others, preventing groupthink)
+- **Parallel execution** — In Independent mode, models 1..N stream their responses simultaneously for faster results, with a real-time Council Progress overlay tracking each model's status
 - **Master verdict** — a designated model synthesizes all opinions into a final recommendation
 
 ### Direct Chat
@@ -151,8 +152,9 @@ src/                          React + TypeScript frontend
 ├── components/
 │   ├── chat/                 ChatView, DirectChatView, AgentPicker,
 │   │                         ModelResponse, MasterVerdict, MentionDropdown,
-│   │                         FollowUpQuestion, StreamingText, ModeToggle,
-│   │                         DiscussionSettingsBar
+│   │                         FollowUpQuestion, ClarifyingQuestion,
+│   │                         ParallelStatusOverlay, StreamingText,
+│   │                         ModeToggle, DiscussionSettingsBar
 │   ├── settings/             ModelManager, ApiKeyManager, Appearance, Advanced
 │   ├── setup/                First-run wizard
 │   └── common/               Button, Toggle, Modal
