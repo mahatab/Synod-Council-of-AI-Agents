@@ -16,14 +16,19 @@ interface SettingsModalProps {
 
 type SettingsTab = 'models' | 'usage' | 'keys' | 'appearance' | 'advanced' | 'sessions' | 'telegram';
 
-const tabs: { id: SettingsTab; label: string; icon: typeof Bot }[] = [
+type TabEntry = { id: SettingsTab; label: string; icon: typeof Bot };
+
+const tabs: TabEntry[] = [
   { id: 'models', label: 'Models', icon: Bot },
-  { id: 'usage', label: 'Usage', icon: BarChart3 },
   { id: 'keys', label: 'API Keys', icon: Key },
   { id: 'appearance', label: 'Appearance', icon: Palette },
   { id: 'sessions', label: 'Sessions', icon: HardDrive },
   { id: 'advanced', label: 'Advanced', icon: Sliders },
   { id: 'telegram', label: 'Telegram', icon: MessageCircle },
+];
+
+const bottomTabs: TabEntry[] = [
+  { id: 'usage', label: 'Usage', icon: BarChart3 },
 ];
 
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
@@ -35,6 +40,21 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         {/* Tab navigation */}
         <div className="w-40 flex-shrink-0 space-y-1">
           {tabs.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm rounded-[var(--radius-md)] transition-colors ${
+                activeTab === id
+                  ? 'bg-[var(--color-bg-active)] text-[var(--color-text-primary)] font-medium'
+                  : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-primary)]'
+              }`}
+            >
+              <Icon size={16} />
+              {label}
+            </button>
+          ))}
+          <div className="border-t border-[var(--color-border-primary)] my-1" />
+          {bottomTabs.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
               onClick={() => setActiveTab(id)}
