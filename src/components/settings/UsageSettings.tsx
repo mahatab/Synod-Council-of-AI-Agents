@@ -211,7 +211,7 @@ export default function UsageSettings() {
             </p>
           </div>
           <div className="p-3 rounded-[var(--radius-md)] border border-[var(--color-border-primary)] bg-[var(--color-bg-secondary)]">
-            <p className="text-xs text-[var(--color-text-tertiary)] mb-1">Active Models</p>
+            <p className="text-xs text-[var(--color-text-tertiary)] mb-1">Models Used</p>
             <p className="text-lg font-semibold text-[var(--color-text-primary)]">
               {usageStats.length}
             </p>
