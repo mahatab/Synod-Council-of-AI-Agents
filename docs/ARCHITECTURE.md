@@ -161,7 +161,8 @@ Cargo.toml (workspace root)
 - **ModelResponse** / **MasterVerdict** — Display model outputs with provider colors, copy buttons
 - **ClarifyingQuestion** — Emerald-themed UI for answering the first model's clarifying questions, with markdown rendering and highlighted list items
 - **ParallelStatusOverlay** — Transparent floating status bar showing real-time completion status for each parallel model (thinking/streaming/done/error) with animated provider-colored indicators
-- **SettingsModal** — Tabbed settings: Models (drag-drop reorder), API Keys, Appearance, Sessions, Advanced, Telegram
+- **SettingsModal** — Tabbed settings: Models (drag-drop reorder), API Keys, Appearance, Sessions, Usage, Advanced, Telegram
+- **UsageSettings** — Dedicated Usage tab with summary stat cards (total tokens, estimated cost, models used) and per-model token/cost breakdown powered by static pricing data from `lib/pricing.ts`
 - **Sidebar** — Session history grouped by date (Today, Yesterday, Previous 7 Days, etc.), filtered by active mode
 - **ModeToggle** — Switches between Council and Direct Chat modes
 

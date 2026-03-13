@@ -64,9 +64,13 @@ You ask a question, and your council of AI models responds. In **Sequential** mo
 - Searchable history grouped by date
 - Custom storage location
 
-### Token Usage Tracking
+### Token Usage & Cost Tracking ![Coming in v0.4.3](https://img.shields.io/badge/coming_in-v0.4.3-yellow)
 - Per-model input/output token counts
-- Aggregated usage stats in Settings
+- **Estimated USD cost** per model and grand total, powered by [tokentally](https://github.com/steipete/tokentally) with static pricing for all 28 models
+- Dedicated **Usage tab** in Settings — separates read-only analytics from editable model configuration
+- Summary stat cards showing total tokens, total cost, and models used at a glance
+
+> **Note:** These features are already merged into `main` and available if you [build from source](#run). They will be included in the next release (v0.4.3).
 
 ### Telegram Bot Integration
 - **Built-in Telegram bot** — chat with Synode from any device
@@ -176,11 +180,11 @@ Cargo.toml                    Workspace root
     │   │                     ModelResponse, MasterVerdict, MentionDropdown,
     │   │                     FollowUpQuestion, ClarifyingQuestion,
     │   │                     ParallelStatusOverlay, StreamingText
-    │   ├── settings/         Models, API Keys, Appearance, Sessions, Telegram
+    │   ├── settings/         Models, API Keys, Appearance, Sessions, Usage, Telegram
     │   ├── setup/            First-run wizard
     │   └── common/           Button, Toggle, Modal
     ├── stores/               Zustand stores (council, directChat, settings, session)
-    ├── lib/                  Tauri IPC bindings, theme, markdown, sessionTitle
+    ├── lib/                  Tauri IPC bindings, theme, markdown, sessionTitle, pricing
     └── types/                TypeScript definitions
 ```
 
