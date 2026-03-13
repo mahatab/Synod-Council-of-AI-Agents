@@ -66,7 +66,7 @@ You ask a question, and your council of AI models responds. In **Sequential** mo
 
 ### Token Usage & Cost Tracking ![Coming in v0.4.3](https://img.shields.io/badge/coming_in-v0.4.3-yellow)
 - Per-model input/output token counts
-- **Estimated USD cost** per model and grand total, powered by [tokentally](https://github.com/steipete/tokentally) with static pricing for all 28 models
+- **Estimated USD cost** per model and grand total, powered by [tokentally](https://github.com/steipete/tokentally) with static pricing for all 29 models
 - Dedicated **Usage tab** in Settings — separates read-only analytics from editable model configuration
 - Summary stat cards showing total tokens, total cost, and models used at a glance
 
