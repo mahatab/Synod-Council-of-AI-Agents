@@ -92,7 +92,6 @@ You ask a question, and your council of AI models responds. In **Sequential** mo
 - **Secure API key storage** — macOS Keychain or Windows Credential Manager
 - **Setup wizard** with built-in API key instructions for each provider
 - **External links** — URLs in model responses open in the system default browser
-- **About window** — branded About Synode window accessible from the app menu (macOS: Synode → About Synode)
 
 ## Screenshots
 
