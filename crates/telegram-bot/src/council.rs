@@ -26,6 +26,7 @@ pub async fn run_council(
     let settings = app_state.settings.read().await.clone();
     let models = &settings.council_models;
     let master = &settings.master_model;
+    let web_search = settings.internet_access_enabled;
 
     if models.is_empty() {
         bot.send_message(chat_id, "No council models configured. Set up models in the desktop app first.")
@@ -117,7 +118,7 @@ pub async fn run_council(
                 .map(|s| s.as_str())
                 .unwrap_or(&default_prompt);
 
-            match formatting::with_typing(bot, chat_id, call_model(&model.provider, &model.model, &messages, Some(system_prompt), &key, false)).await {
+            match formatting::with_typing(bot, chat_id, call_model(&model.provider, &model.model, &messages, Some(system_prompt), &key, web_search)).await {
                 Ok(result) => {
                     // Check for clarifying question (first model only)
                     if i == 0 && looks_like_clarifying_question(&result.content) {
@@ -231,6 +232,7 @@ pub async fn resume_after_clarification(
     let settings = app_state.settings.read().await.clone();
     let models = &settings.council_models;
     let master = &settings.master_model;
+    let web_search = settings.internet_access_enabled;
 
     app_state.set_chat_mode(chat_id.0, ChatMode::CouncilActive).await;
 
@@ -261,7 +263,7 @@ pub async fn resume_after_clarification(
             &follow_up_messages,
             Some(system_prompt),
             &key,
-            false,
+            web_search,
         ))
         .await
         {
@@ -320,7 +322,7 @@ pub async fn resume_after_clarification(
             );
             let default_prompt = get_default_system_prompt(m, false, &settings.discussion_depth, &settings.discussion_style);
 
-            match formatting::with_typing(bot, chat_id, call_model(&m.provider, &m.model, &messages, Some(&default_prompt), &key, false)).await {
+            match formatting::with_typing(bot, chat_id, call_model(&m.provider, &m.model, &messages, Some(&default_prompt), &key, web_search)).await {
                 Ok(result) => {
                     let html = formatting::format_model_response(&m.display_name, &result.content);
                     formatting::edit_html(bot, chat_id, thinking_msg.id, &html).await?;
@@ -396,7 +398,7 @@ async fn generate_master_verdict(
             "You are the master AI judge in a council of AI models. You have reviewed all council members' opinions on the user's question. Your job is to synthesize the best advice, resolve any disagreements, and deliver a clear, actionable final verdict. Be thorough but concise. Structure your response with clear sections."
         };
 
-        match formatting::with_typing(bot, chat_id, call_model(&master.provider, &master.model, &messages, Some(sys_prompt), &key, false)).await {
+        match formatting::with_typing(bot, chat_id, call_model(&master.provider, &master.model, &messages, Some(sys_prompt), &key, settings.internet_access_enabled)).await {
             Ok(result) => {
                 let html = formatting::format_master_verdict(&result.content);
                 formatting::edit_html(bot, chat_id, verdict_msg.id, &html).await?;
