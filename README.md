@@ -64,13 +64,11 @@ You ask a question, and your council of AI models responds. In **Sequential** mo
 - Searchable history grouped by date
 - Custom storage location
 
-### Token Usage & Cost Tracking ![Coming in v0.4.3](https://img.shields.io/badge/coming_in-v0.4.3-yellow)
+### Token Usage & Cost Tracking
 - Per-model input/output token counts
 - **Estimated USD cost** per model and grand total, powered by [tokentally](https://github.com/steipete/tokentally) with static pricing for all 29 models
 - Dedicated **Usage tab** in Settings — separates read-only analytics from editable model configuration
 - Summary stat cards showing total tokens, total cost, and models used at a glance
-
-> **Note:** These features are already merged into `main` and available if you [build from source](#run). They will be included in the next release (v0.4.3).
 
 ### Telegram Bot Integration
 - **Built-in Telegram bot** — chat with Synode from any device
@@ -79,14 +77,13 @@ You ask a question, and your council of AI models responds. In **Sequential** mo
 - **Auto-start** — bot launches with the app when enabled in Settings
 - See [Telegram Bot docs](docs/TELEGRAM_BOT.md) for setup instructions
 
-### Internet Access (Web Search) ![Coming in v0.4.3](https://img.shields.io/badge/coming_in-v0.4.3-yellow)
+### Internet Access (Web Search)
 - **Live web search** — models can search the web for up-to-date information when answering
 - **4 supported providers** — Anthropic (`web_search` tool), Google (`google_search` grounding), OpenAI (Responses API), xAI (Responses API, Grok-4 only)
 - **Automatic model filtering** — unsupported providers (DeepSeek, Mistral, Together AI, Cohere) are excluded from council when internet is enabled, with amber warnings showing which models are skipped
 - **Globe toggle** — enable/disable from the chat input area or Advanced Settings
 - **Smart prompting** — system prompt nudge instructs models to actively use their search tools
-
-> **Note:** These features are already merged into `main` and available if you [build from source](#run). They will be included in the next release (v0.4.3).
+- **Telegram bot support** — web search works in Telegram council and direct chat when enabled in desktop settings
 
 ### Polished UX
 - **Real-time streaming** with 4 animated cursor styles (ripple, breathing, orbit, multi-caret)
@@ -95,6 +92,7 @@ You ask a question, and your council of AI models responds. In **Sequential** mo
 - **Secure API key storage** — macOS Keychain or Windows Credential Manager
 - **Setup wizard** with built-in API key instructions for each provider
 - **External links** — URLs in model responses open in the system default browser
+- **About window** — branded About Synode window accessible from the app menu (macOS: Synode → About Synode)
 
 ## Screenshots
 
@@ -173,8 +171,8 @@ cargo tauri build
 ```
 Cargo.toml                    Workspace root
 ├── src-tauri/                Tauri desktop app (Rust backend)
-│   ├── commands/             stream_chat, keychain, sessions, settings, telegram
-│   └── lib.rs                App setup, bot auto-start
+│   ├── commands/             stream_chat, keychain, sessions, settings, telegram, window
+│   └── lib.rs                App setup, menu, About window, bot auto-start
 ├── crates/council-core/      Shared library
 │   ├── providers/            8 AI provider integrations with SSE streaming
 │   ├── models/               Config, session, discussion entry types
@@ -193,6 +191,7 @@ Cargo.toml                    Workspace root
     │   │                     FollowUpQuestion, ClarifyingQuestion,
     │   │                     ParallelStatusOverlay, StreamingText
     │   ├── settings/         Models, API Keys, Appearance, Sessions, Usage, Telegram
+    │   ├── about/            About Synode window (separate webview)
     │   ├── setup/            First-run wizard
     │   └── common/           Button, Toggle, Modal
     ├── stores/               Zustand stores (council, directChat, settings, session)
