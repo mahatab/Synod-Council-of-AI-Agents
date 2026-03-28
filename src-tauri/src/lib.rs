@@ -100,6 +100,7 @@ pub fn run() {
             keychain::delete_api_key,
             keychain::has_api_key,
             api_calls::stream_chat,
+            api_calls::fetch_lmstudio_models,
             sessions::save_session,
             sessions::load_session,
             sessions::list_sessions,

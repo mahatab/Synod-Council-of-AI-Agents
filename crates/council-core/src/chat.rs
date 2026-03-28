@@ -5,8 +5,8 @@ use crate::models::config::{ChatMessage, Provider};
 use crate::providers::UsageData;
 use crate::providers::{
     anthropic::AnthropicProvider, cohere::CohereProvider, deepseek::DeepSeekProvider,
-    google::GoogleProvider, mistral::MistralProvider, openai::OpenAIProvider,
-    together::TogetherProvider, xai::XAIProvider, StreamEvent, TokenStream,
+    google::GoogleProvider, lmstudio::LMStudioProvider, mistral::MistralProvider,
+    openai::OpenAIProvider, together::TogetherProvider, xai::XAIProvider, StreamEvent, TokenStream,
 };
 
 /// Check whether a specific model supports web search.
@@ -23,7 +23,7 @@ pub fn model_supports_web_search(provider: &Provider, model: &str) -> bool {
         // OpenAI: most models support web search, except nano and o3-mini
         Provider::OpenAI => !matches!(model, "gpt-4.1-nano" | "o3-mini"),
         // Other providers have no web search API
-        Provider::DeepSeek | Provider::Mistral | Provider::Together | Provider::Cohere => false,
+        Provider::DeepSeek | Provider::Mistral | Provider::Together | Provider::Cohere | Provider::LMStudio => false,
     }
 }
 
@@ -157,6 +157,14 @@ async fn create_stream(
         }
         Provider::Cohere => {
             CohereProvider::new()
+                .stream_chat(api_key, model, messages, final_system_prompt, web_search_enabled)
+                .await
+        }
+        Provider::LMStudio => {
+            let base_url = crate::settings::load_settings()
+                .ok()
+                .and_then(|s| s.lm_studio_base_url);
+            LMStudioProvider::new(base_url.as_deref())
                 .stream_chat(api_key, model, messages, final_system_prompt, web_search_enabled)
                 .await
         }

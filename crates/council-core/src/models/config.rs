@@ -12,6 +12,7 @@ pub enum Provider {
     Mistral,
     Together,
     Cohere,
+    LMStudio,
 }
 
 #[allow(dead_code)]
@@ -26,6 +27,7 @@ impl Provider {
             Provider::Mistral => "Mistral",
             Provider::Together => "Together AI",
             Provider::Cohere => "Cohere",
+            Provider::LMStudio => "LM Studio",
         }
     }
 
@@ -39,6 +41,7 @@ impl Provider {
             Provider::Mistral => "com.council-of-ai-agents.mistral",
             Provider::Together => "com.council-of-ai-agents.together",
             Provider::Cohere => "com.council-of-ai-agents.cohere",
+            Provider::LMStudio => "com.council-of-ai-agents.lmstudio",
         }
     }
 }
@@ -121,6 +124,8 @@ pub struct AppSettings {
     pub telegram_enabled: bool,
     #[serde(default)]
     pub internet_access_enabled: bool,
+    #[serde(default)]
+    pub lm_studio_base_url: Option<String>,
 }
 
 impl Default for AppSettings {
@@ -140,6 +145,7 @@ impl Default for AppSettings {
             setup_completed: false,
             telegram_enabled: false,
             internet_access_enabled: false,
+            lm_studio_base_url: None,
         }
     }
 }

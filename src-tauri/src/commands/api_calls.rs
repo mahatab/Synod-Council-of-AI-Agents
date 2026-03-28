@@ -4,8 +4,8 @@ use tauri::{command, AppHandle, Emitter};
 use council_core::models::config::{ChatMessage, Provider, StreamChatResult, StreamToken, UsageData};
 use council_core::providers::{
     anthropic::AnthropicProvider, cohere::CohereProvider, deepseek::DeepSeekProvider,
-    google::GoogleProvider, mistral::MistralProvider, openai::OpenAIProvider,
-    together::TogetherProvider, xai::XAIProvider, StreamEvent,
+    google::GoogleProvider, lmstudio::LMStudioProvider, mistral::MistralProvider,
+    openai::OpenAIProvider, together::TogetherProvider, xai::XAIProvider, StreamEvent,
 };
 
 #[allow(clippy::too_many_arguments)]
@@ -67,6 +67,13 @@ pub async fn stream_chat(
         }
         Provider::Cohere => {
             let p = CohereProvider::new();
+            p.stream_chat(&api_key, &model, &messages, system_ref, web_search_enabled).await
+        }
+        Provider::LMStudio => {
+            let base_url = council_core::settings::load_settings()
+                .ok()
+                .and_then(|s| s.lm_studio_base_url);
+            let p = LMStudioProvider::new(base_url.as_deref());
             p.stream_chat(&api_key, &model, &messages, system_ref, web_search_enabled).await
         }
     };
@@ -155,4 +162,12 @@ pub async fn stream_chat(
             Err(e.to_string())
         }
     }
+}
+
+#[command]
+pub async fn fetch_lmstudio_models(
+    base_url: Option<String>,
+) -> Result<Vec<council_core::providers::lmstudio::LMStudioModel>, String> {
+    let provider = LMStudioProvider::new(base_url.as_deref());
+    provider.list_models().await.map_err(|e| e.to_string())
 }

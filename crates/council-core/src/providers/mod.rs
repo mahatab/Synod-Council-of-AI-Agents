@@ -6,6 +6,7 @@ pub mod deepseek;
 pub mod mistral;
 pub mod together;
 pub mod cohere;
+pub mod lmstudio;
 
 use anyhow::{anyhow, Result};
 use bytes::Bytes;

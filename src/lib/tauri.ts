@@ -110,3 +110,10 @@ export async function stopTelegramBot(): Promise<void> {
 export async function getTelegramStatus(): Promise<{ running: boolean }> {
   return invoke('get_telegram_status');
 }
+
+// LM Studio commands
+export async function fetchLMStudioModels(
+  baseUrl?: string,
+): Promise<{ id: string }[]> {
+  return invoke('fetch_lmstudio_models', { baseUrl: baseUrl ?? null });
+}

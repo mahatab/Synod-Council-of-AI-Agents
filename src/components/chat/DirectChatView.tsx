@@ -9,7 +9,13 @@ import Button from '../common/Button';
 import { useDirectChatStore } from '../../stores/directChatStore';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { useSessionStore } from '../../stores/sessionStore';
-import { getApiKey } from '../../lib/tauri';
+import { getApiKey as tauriGetApiKey } from '../../lib/tauri';
+
+/** Wraps the keychain lookup to return a dummy key for LM Studio (no real key needed). */
+const getApiKey = async (service: string): Promise<string | null> => {
+  if (service === 'com.council-of-ai-agents.lmstudio') return 'lm-studio';
+  return tauriGetApiKey(service);
+};
 import { generateSessionTitle } from '../../lib/sessionTitle';
 import type { DirectChatAgent, DirectChatMessage, Provider, Session } from '../../types';
 import { getProviderColor } from '../../types';
@@ -195,6 +201,11 @@ export default function DirectChatView() {
                   <p className="text-lg font-medium text-[var(--color-text-primary)] mb-1">
                     {selectedAgent.displayName}
                   </p>
+                  {selectedAgent.provider === 'lmstudio' && (
+                    <span className="inline-block text-xs px-2 py-0.5 rounded-full font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 mb-1">
+                      Local Model
+                    </span>
+                  )}
                   <p className="text-sm text-[var(--color-text-tertiary)]">
                     Start a conversation below
                   </p>

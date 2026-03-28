@@ -1,5 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { getApiKey, streamChat, onStreamToken } from './tauri';
+import { getApiKey as tauriGetApiKey, streamChat, onStreamToken } from './tauri';
+
+const getApiKey = async (service: string): Promise<string | null> => {
+  if (service === 'com.council-of-ai-agents.lmstudio') return 'lm-studio';
+  return tauriGetApiKey(service);
+};
 import type { AppSettings, Provider } from '../types';
 
 export async function generateSessionTitle(

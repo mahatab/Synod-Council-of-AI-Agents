@@ -125,18 +125,25 @@ pub async fn handle_command(
 
         Command::Models => {
             let settings = app_state.settings.read().await;
+            let mut text = String::new();
+
             if settings.council_models.is_empty() {
-                bot.send_message(chat_id, "No models configured. Set up models in the desktop app.")
-                    .await?;
+                text.push_str("No council models configured. Set up models in the desktop app.\n");
             } else {
-                let mut text = String::from("Configured council models:\n\n");
+                text.push_str("Configured council models:\n\n");
                 for (i, m) in settings.council_models.iter().enumerate() {
+                    let local_tag = if matches!(m.provider, council_core::models::config::Provider::LMStudio) {
+                        " [Local]"
+                    } else {
+                        ""
+                    };
                     text.push_str(&format!(
-                        "{}. {} ({} / {})\n",
+                        "{}. {} ({} / {}){}\n",
                         i + 1,
                         m.display_name,
                         m.provider.display_name(),
                         m.model,
+                        local_tag,
                     ));
                 }
                 text.push_str(&format!(
@@ -144,8 +151,23 @@ pub async fn handle_command(
                     settings.master_model.model,
                     settings.master_model.provider.display_name(),
                 ));
-                bot.send_message(chat_id, text).await?;
             }
+
+            // Show available LM Studio models if server is running
+            let base_url = settings.lm_studio_base_url.clone();
+            drop(settings);
+            let lms_provider = council_core::providers::lmstudio::LMStudioProvider::new(base_url.as_deref());
+            if let Ok(models) = lms_provider.list_models().await {
+                if !models.is_empty() {
+                    text.push_str("\n\nLocal models (LM Studio):\n");
+                    for m in &models {
+                        text.push_str(&format!("  - {}\n", m.id));
+                    }
+                    text.push_str("\nUse /chat <model-id> <message> to chat with a local model.");
+                }
+            }
+
+            bot.send_message(chat_id, text).await?;
         }
 
         Command::Sessions => {

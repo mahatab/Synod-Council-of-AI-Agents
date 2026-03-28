@@ -260,6 +260,7 @@ fn string_to_provider(s: &str) -> Option<Provider> {
         "mistral" => Some(Provider::Mistral),
         "together" => Some(Provider::Together),
         "cohere" => Some(Provider::Cohere),
+        "lmstudio" => Some(Provider::LMStudio),
         _ => None,
     }
 }

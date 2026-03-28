@@ -71,6 +71,9 @@ impl AppState {
 
     /// Get an API key for a Provider enum value.
     pub fn get_api_key_for_provider(&self, provider: &Provider) -> Option<String> {
+        if matches!(provider, Provider::LMStudio) {
+            return Some("lm-studio".to_string());
+        }
         let name = provider_to_string(provider);
         self.get_api_key(&name)
     }
@@ -105,6 +108,7 @@ pub fn provider_to_string(provider: &Provider) -> String {
         Provider::Mistral => "mistral",
         Provider::Together => "together",
         Provider::Cohere => "cohere",
+        Provider::LMStudio => "lmstudio",
     }
     .to_string()
 }

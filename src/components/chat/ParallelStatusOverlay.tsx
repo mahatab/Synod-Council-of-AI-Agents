@@ -146,6 +146,11 @@ export default function ParallelStatusOverlay({
                 <span className="text-xs font-medium text-[var(--color-text-secondary)] truncate max-w-[100px]">
                   {model.displayName}
                 </span>
+                {model.provider === 'lmstudio' && (
+                  <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
+                    local
+                  </span>
+                )}
                 <span
                   className="text-[10px] font-medium"
                   style={{

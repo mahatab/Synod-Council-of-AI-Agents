@@ -1,4 +1,4 @@
-export type Provider = 'anthropic' | 'openai' | 'google' | 'xai' | 'deepseek' | 'mistral' | 'together' | 'cohere';
+export type Provider = 'anthropic' | 'openai' | 'google' | 'xai' | 'deepseek' | 'mistral' | 'together' | 'cohere' | 'lmstudio';
 
 export interface ModelConfig {
   provider: Provider;
@@ -34,6 +34,7 @@ export interface AppSettings {
   setupCompleted: boolean;
   telegramEnabled: boolean;
   internetAccessEnabled: boolean;
+  lmStudioBaseUrl?: string;
 }
 
 export interface ChatMessage {
@@ -344,6 +345,19 @@ export const PROVIDERS: ProviderInfo[] = [
       'Copy the generated API key',
     ],
   },
+  {
+    id: 'lmstudio',
+    name: 'LM Studio',
+    keychainService: 'com.council-of-ai-agents.lmstudio',
+    models: [],
+    apiKeyUrl: 'https://lmstudio.ai',
+    apiKeySteps: [
+      'Download and install LM Studio from lmstudio.ai',
+      'Open LM Studio and download a model',
+      'Load the model and start the local server (default port: 1234)',
+      'No API key is required',
+    ],
+  },
 ];
 
 export function getProviderInfo(providerId: Provider): ProviderInfo {
@@ -368,5 +382,7 @@ export function getProviderColor(provider: Provider): string {
       return '#6366F1';
     case 'cohere':
       return '#39594D';
+    case 'lmstudio':
+      return '#00A67E';
   }
 }

@@ -16,7 +16,7 @@ export default function ApiKeyManager() {
     let cancelled = false;
     async function loadKeyStates() {
       const states: Record<string, { hasKey: boolean; visible: boolean; value: string; editing: boolean }> = {};
-      for (const provider of PROVIDERS) {
+      for (const provider of PROVIDERS.filter(p => p.id !== 'lmstudio')) {
         const has = await tauri.hasApiKey(provider.keychainService);
         states[provider.id] = { hasKey: has, visible: false, value: '', editing: false };
       }
@@ -72,7 +72,7 @@ export default function ApiKeyManager() {
         Keys are stored securely in macOS Keychain
       </p>
 
-      {PROVIDERS.map((provider) => {
+      {PROVIDERS.filter(p => p.id !== 'lmstudio').map((provider) => {
         const state = keyStates[provider.id];
 
         return (

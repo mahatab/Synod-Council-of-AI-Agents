@@ -22,6 +22,8 @@ import { useSettingsStore } from '../../stores/settingsStore';
 import { PROVIDERS, getProviderColor, modelSupportsWebSearch } from '../../types';
 import type { ModelConfig, Provider, MasterModelConfig } from '../../types';
 
+const CLOUD_PROVIDERS = PROVIDERS.filter(p => p.id !== 'lmstudio');
+
 interface SortableModelProps {
   model: ModelConfig;
   isFirst: boolean;
@@ -68,8 +70,13 @@ function SortableModel({ model, isFirst, onRemove, internetAccessEnabled }: Sort
             className="text-xs px-1.5 py-0.5 rounded font-medium"
             style={{ backgroundColor: `${color}15`, color }}
           >
-            {model.provider}
+            {model.provider === 'lmstudio' ? 'LM Studio' : model.provider}
           </span>
+          {model.provider === 'lmstudio' && (
+            <span className="text-xs px-1.5 py-0.5 rounded font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+              Local
+            </span>
+          )}
           {isFirst && (
             <span className="text-xs text-[var(--color-accent)] font-medium">
               (Can ask questions)
@@ -124,7 +131,7 @@ export default function ModelManager() {
   const handleAddModel = () => {
     if (!selectedModel) return;
 
-    const provider = PROVIDERS.find((p) => p.id === selectedProvider)!;
+    const provider = CLOUD_PROVIDERS.find((p) => p.id === selectedProvider)!;
     const model = provider.models.find((m) => m.id === selectedModel)!;
 
     // Check for duplicates
@@ -153,7 +160,8 @@ export default function ModelManager() {
   };
 
   const handleMasterModelChange = (provider: Provider, model: string) => {
-    const providerInfo = PROVIDERS.find((p) => p.id === provider)!;
+    const providerInfo = CLOUD_PROVIDERS.find((p) => p.id === provider);
+    if (!providerInfo) return;
     const modelInfo = providerInfo.models.find((m) => m.id === model);
     if (modelInfo) {
       const masterModel: MasterModelConfig = { provider, model };
@@ -207,7 +215,7 @@ export default function ModelManager() {
               }}
               className="w-full px-3 py-1.5 text-sm bg-[var(--color-bg-input)] border border-[var(--color-border-primary)] rounded-[var(--radius-sm)] text-[var(--color-text-primary)]"
             >
-              {PROVIDERS.map((p) => (
+              {CLOUD_PROVIDERS.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
                 </option>
@@ -219,7 +227,7 @@ export default function ModelManager() {
               className="w-full px-3 py-1.5 text-sm bg-[var(--color-bg-input)] border border-[var(--color-border-primary)] rounded-[var(--radius-sm)] text-[var(--color-text-primary)]"
             >
               <option value="">Select model...</option>
-              {PROVIDERS.find((p) => p.id === selectedProvider)?.models.map(
+              {CLOUD_PROVIDERS.find((p) => p.id === selectedProvider)?.models.map(
                 (m) => (
                   <option key={m.id} value={m.id}>
                     {m.name}
@@ -268,14 +276,14 @@ export default function ModelManager() {
             value={settings.masterModel.provider}
             onChange={(e) => {
               const provider = e.target.value as Provider;
-              const firstModel = PROVIDERS.find((p) => p.id === provider)?.models[0];
+              const firstModel = CLOUD_PROVIDERS.find((p) => p.id === provider)?.models[0];
               if (firstModel) {
                 handleMasterModelChange(provider, firstModel.id);
               }
             }}
             className="px-3 py-1.5 text-sm bg-[var(--color-bg-input)] border border-[var(--color-border-primary)] rounded-[var(--radius-sm)] text-[var(--color-text-primary)]"
           >
-            {PROVIDERS.map((p) => (
+            {CLOUD_PROVIDERS.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
               </option>
@@ -288,7 +296,7 @@ export default function ModelManager() {
             }
             className="flex-1 px-3 py-1.5 text-sm bg-[var(--color-bg-input)] border border-[var(--color-border-primary)] rounded-[var(--radius-sm)] text-[var(--color-text-primary)]"
           >
-            {PROVIDERS.find((p) => p.id === settings.masterModel.provider)?.models.map(
+            {CLOUD_PROVIDERS.find((p) => p.id === settings.masterModel.provider)?.models.map(
               (m) => (
                 <option key={m.id} value={m.id}>
                   {m.name}

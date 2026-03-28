@@ -3,7 +3,7 @@ import { Bot, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { PROVIDERS, getProviderColor } from '../../types';
 import type { DirectChatAgent, Provider } from '../../types';
-import { hasApiKey } from '../../lib/tauri';
+import { hasApiKey, fetchLMStudioModels } from '../../lib/tauri';
 import { useSettingsStore } from '../../stores/settingsStore';
 
 interface AgentPickerProps {
@@ -25,31 +25,56 @@ export default function AgentPicker({ onSelect }: AgentPickerProps) {
   const [loading, setLoading] = useState(true);
   const internetAccessEnabled = useSettingsStore((s) => s.settings.internetAccessEnabled);
 
+  const [lmStudioModels, setLMStudioModels] = useState<ModelItem[]>([]);
+
   useEffect(() => {
     const checkProviders = async () => {
       const available = new Set<string>();
       await Promise.all(
-        PROVIDERS.map(async (p) => {
+        PROVIDERS.filter(p => p.id !== 'lmstudio').map(async (p) => {
           const has = await hasApiKey(p.keychainService);
           if (has) available.add(p.id);
         }),
       );
+
+      // LM Studio is always "available" (no key needed) — try to fetch models
+      try {
+        const models = await fetchLMStudioModels();
+        if (models.length > 0) {
+          available.add('lmstudio');
+          setLMStudioModels(
+            models.map((m) => ({
+              provider: 'lmstudio',
+              providerName: 'LM Studio',
+              model: m.id,
+              displayName: m.id,
+              color: getProviderColor('lmstudio'),
+            })),
+          );
+        }
+      } catch {
+        // LM Studio not running — skip
+      }
+
       setAvailableProviders(available);
       setLoading(false);
     };
     checkProviders();
   }, []);
 
-  const allModels: ModelItem[] = PROVIDERS.flatMap((p) =>
-    p.models.map((m) => ({
-      provider: p.id,
-      providerName: p.name,
-      model: m.id,
-      displayName: m.name,
-      color: getProviderColor(p.id as Provider),
-      webSearch: m.webSearch,
-    })),
-  );
+  const allModels: ModelItem[] = [
+    ...PROVIDERS.filter(p => p.id !== 'lmstudio').flatMap((p) =>
+      p.models.map((m) => ({
+        provider: p.id,
+        providerName: p.name,
+        model: m.id,
+        displayName: m.name,
+        color: getProviderColor(p.id as Provider),
+        webSearch: m.webSearch,
+      })),
+    ),
+    ...lmStudioModels,
+  ];
 
   const filtered = search.trim()
     ? allModels.filter(
@@ -152,7 +177,11 @@ export default function AgentPicker({ onSelect }: AgentPickerProps) {
                     {m.displayName}
                   </p>
                   <p className="text-xs text-[var(--color-text-tertiary)]">
-                    {m.providerName}
+                    {m.provider === 'lmstudio' ? (
+                      <span className="text-emerald-600 dark:text-emerald-400">Local</span>
+                    ) : (
+                      m.providerName
+                    )}
                     {blockedByWebSearch ? ' · No web search' : !hasKey ? ' · No API key' : ''}
                   </p>
                 </div>

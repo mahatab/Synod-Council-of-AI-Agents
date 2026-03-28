@@ -16,7 +16,13 @@ import Button from '../common/Button';
 import { useCouncilStore } from '../../stores/councilStore';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { useSessionStore } from '../../stores/sessionStore';
-import { getApiKey } from '../../lib/tauri';
+import { getApiKey as tauriGetApiKey } from '../../lib/tauri';
+
+/** Wraps the keychain lookup to return a dummy key for LM Studio (no real key needed). */
+const getApiKey = async (service: string): Promise<string | null> => {
+  if (service === 'com.council-of-ai-agents.lmstudio') return 'lm-studio';
+  return tauriGetApiKey(service);
+};
 import { generateSessionTitle } from '../../lib/sessionTitle';
 import type { DiscussionEntry, Session } from '../../types';
 import { modelSupportsWebSearch } from '../../types';
